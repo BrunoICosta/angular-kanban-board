@@ -1,3 +1,12 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { ShellComponent } from './core/layout/shell/shell.component';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: ShellComponent,
+    children: [],
+  },
+  { path: '**', redirectTo: '' },
+];
