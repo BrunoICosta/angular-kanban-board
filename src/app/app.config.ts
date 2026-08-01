@@ -13,11 +13,12 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
-import { loadSession } from './core/auth/session.storage';
+import { loadSession } from './core/auth/session-storage';
 import { AuthEffects } from './core/auth/store/auth.effects';
 import { authFeature, authStateFromSession } from './core/auth/store/auth.reducer';
 import { AppState } from './core/store/app.state';
-import { mockApiErrorInterceptor, provideMockApi } from './mock-api/provide-mock-api';
+import { mockApiErrorInterceptor } from './mock-api/mock-api-error.interceptor';
+import { provideMockApi } from './mock-api/provide-mock-api';
 
 export const appConfig: ApplicationConfig = {
   providers: [

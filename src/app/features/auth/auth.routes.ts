@@ -4,6 +4,7 @@ export const AUTH_ROUTES: Routes = [
   {
     path: '',
     title: 'Entrar · Fluxo',
-    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
+    loadComponent: () =>
+      import('./pages/login-page/login-page.component').then((m) => m.LoginPageComponent),
   },
 ];

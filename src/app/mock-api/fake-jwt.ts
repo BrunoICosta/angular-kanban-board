@@ -1,4 +1,4 @@
-import { JwtPayload, User } from '../core/auth/auth.models';
+import { JwtPayload, User } from '../core/auth/auth.model';
 import { base64UrlEncode } from '../core/auth/jwt';
 
 const TOKEN_TTL_SECONDS = 8 * 60 * 60;

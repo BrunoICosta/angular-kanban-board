@@ -1,7 +1,7 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 
-import { User } from '../auth.models';
-import { Session } from '../session.storage';
+import { User } from '../auth.model';
+import { Session } from '../session-storage';
 import { AuthActions } from './auth.actions';
 
 export interface AuthState {

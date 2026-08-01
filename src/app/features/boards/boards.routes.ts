@@ -5,6 +5,8 @@ export const BOARDS_ROUTES: Routes = [
     path: '',
     title: 'Meus quadros · Fluxo',
     loadComponent: () =>
-      import('./pages/boards-list/boards-list.page').then((m) => m.BoardsListPage),
+      import('./pages/boards-list/boards-list-page.component').then(
+        (m) => m.BoardsListPageComponent,
+      ),
   },
 ];

@@ -5,7 +5,7 @@ import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 
 import { toErrorMessage } from '../../api/http-error';
 import { AuthApiService } from '../auth-api.service';
-import { clearSession, saveSession } from '../session.storage';
+import { clearSession, saveSession } from '../session-storage';
 import { AuthActions } from './auth.actions';
 
 @Injectable()

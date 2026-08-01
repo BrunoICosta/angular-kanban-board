@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../api/api.config';
-import { Credentials, LoginResponse } from './auth.models';
+import { Credentials, LoginResponse } from './auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthApiService {

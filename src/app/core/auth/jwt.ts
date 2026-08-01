@@ -1,4 +1,4 @@
-import { JwtPayload } from './auth.models';
+import { JwtPayload } from './auth.model';
 
 function base64UrlDecode(segment: string): string {
   const base64 = segment.replace(/-/g, '+').replace(/_/g, '/');

@@ -2,21 +2,21 @@ import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angu
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
-import { AuthActions } from '../../../core/auth/store/auth.actions';
-import { selectAuthError, selectIsLoggingIn } from '../../../core/auth/store/auth.reducer';
-import { ThemeService } from '../../../core/theme/theme.service';
-import { IconComponent } from '../../../shared/ui/icon/icon.component';
+import { AuthActions } from '../../../../core/auth/store/auth.actions';
+import { selectAuthError, selectIsLoggingIn } from '../../../../core/auth/store/auth.reducer';
+import { ThemeService } from '../../../../core/theme/theme.service';
+import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 
 export const MIN_PASSWORD_LENGTH = 6;
 
 @Component({
   selector: 'app-login-page',
   imports: [ReactiveFormsModule, IconComponent],
-  templateUrl: './login.page.html',
-  styleUrl: './login.page.scss',
+  templateUrl: './login-page.component.html',
+  styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginPage {
+export class LoginPageComponent {
   private readonly store = inject(Store);
   protected readonly themeService = inject(ThemeService);
 

@@ -1,4 +1,4 @@
-import { User } from './auth.models';
+import { User } from './auth.model';
 import { isJwtExpired } from './jwt';
 
 export interface Session {

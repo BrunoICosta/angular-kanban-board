@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo, ResponseOptions, STATUS } from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
 
-import { Credentials, LoginResponse, User } from '../core/auth/auth.models';
+import { Credentials, LoginResponse, User } from '../core/auth/auth.model';
 import { isJwtExpired } from '../core/auth/jwt';
 import { createFakeJwt, nameFromEmail } from './fake-jwt';
 import { mockApiSettings } from './mock-api.settings';
