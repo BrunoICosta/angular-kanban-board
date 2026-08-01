@@ -1,35 +1,42 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
-  importProvidersFrom,
+  isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
-import { InMemoryDataService } from './mock-api/in-memory-data.service';
-
-/** Path the app is served from (`/` locally, `/angular-kanban-board/` on GitHub Pages). */
-const appBasePath = new URL(document.baseURI).pathname;
+import { loadSession } from './core/auth/session.storage';
+import { AuthEffects } from './core/auth/store/auth.effects';
+import { authFeature, authStateFromSession } from './core/auth/store/auth.reducer';
+import { AppState } from './core/store/app.state';
+import { mockApiErrorInterceptor, provideMockApi } from './mock-api/provide-mock-api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(),
-    // Fake REST backend. It replaces HttpBackend, so everything still goes through HttpClient
-    // (and its interceptors); removing this line points the app at a real API.
-    importProvidersFrom(
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        apiBase: 'api/',
-        rootPath: appBasePath,
-        delay: 350,
-        post204: false,
-        put204: false,
-      }),
+    provideHttpClient(withInterceptors([mockApiErrorInterceptor])),
+    provideMockApi(),
+    provideStore<AppState>(
+      { auth: authFeature.reducer, router: routerReducer },
+      {
+        // Restore the session persisted by a previous visit (if still valid).
+        initialState: () => ({ auth: authStateFromSession(loadSession()) }),
+        runtimeChecks: {
+          strictActionTypeUniqueness: true,
+        },
+      },
     ),
+    provideEffects(AuthEffects),
+    provideRouterStore(),
+    provideStoreDevtools({ maxAge: 50, logOnly: !isDevMode(), name: 'Fluxo Kanban' }),
   ],
 };
