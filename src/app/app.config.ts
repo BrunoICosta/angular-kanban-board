@@ -12,6 +12,7 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 import { routes } from './app.routes';
+import { authInterceptor } from './core/auth/auth.interceptor';
 import { loadSession } from './core/auth/session.storage';
 import { AuthEffects } from './core/auth/store/auth.effects';
 import { authFeature, authStateFromSession } from './core/auth/store/auth.reducer';
@@ -23,7 +24,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withInterceptors([mockApiErrorInterceptor])),
+    // The mock error normalizer must stay last (closest to the backend).
+    provideHttpClient(withInterceptors([authInterceptor, mockApiErrorInterceptor])),
     provideMockApi(),
     provideStore<AppState>(
       { auth: authFeature.reducer, router: routerReducer },

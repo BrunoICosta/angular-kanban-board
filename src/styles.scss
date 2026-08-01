@@ -368,3 +368,60 @@ textarea.input {
     transform: rotate(360deg);
   }
 }
+
+/* ==========================================================================
+   Menus (CDK Menu)
+   ========================================================================== */
+.menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-md);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.88rem;
+
+    span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+  }
+
+  &__separator {
+    height: 1px;
+    margin: 0.3rem 0;
+    background: var(--border);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-size: 0.88rem;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--surface-hover);
+      box-shadow: none;
+      outline: none;
+    }
+
+    &--danger {
+      color: var(--danger);
+    }
+  }
+}

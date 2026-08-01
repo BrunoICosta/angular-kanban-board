@@ -69,3 +69,17 @@
     }
   }
 }
+
+.user-btn {
+  display: inline-grid;
+  place-items: center;
+  padding: 2px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover app-avatar {
+    filter: brightness(1.1);
+  }
+}

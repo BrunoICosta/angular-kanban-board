@@ -1,6 +1,6 @@
 <header class="header">
   <a class="brand" routerLink="/boards" aria-label="Fluxo — ir para meus quadros">
-    <span class="brand__logo" aria-hidden="true"> <span></span><span></span><span></span> </span>
+    <span class="brand__logo" aria-hidden="true"><span></span><span></span><span></span></span>
     <span class="brand__name">Fluxo</span>
   </a>
 
@@ -15,5 +15,30 @@
     >
       <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" />
     </button>
+
+    @if (user(); as user) {
+      <button
+        type="button"
+        class="user-btn"
+        [cdkMenuTriggerFor]="userMenu"
+        [attr.aria-label]="'Menu de ' + user.name"
+      >
+        <app-avatar [name]="user.name" [size]="32" />
+      </button>
+
+      <ng-template #userMenu>
+        <div class="menu" cdkMenu>
+          <div class="menu__header">
+            <strong>{{ user.name }}</strong>
+            <span>{{ user.email }}</span>
+          </div>
+          <div class="menu__separator" role="separator"></div>
+          <button type="button" class="menu__item" cdkMenuItem (cdkMenuItemTriggered)="logout()">
+            <app-icon name="logout" [size]="16" />
+            Sair
+          </button>
+        </div>
+      </ng-template>
+    }
   </div>
 </header>
