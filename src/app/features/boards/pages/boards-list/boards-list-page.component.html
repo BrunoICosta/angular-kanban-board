@@ -1,0 +1,45 @@
+<section class="page" aria-labelledby="boards-title">
+  <header class="page__header">
+    <div>
+      <p class="page__eyebrow">Olá, {{ user()?.name ?? 'visitante' }}</p>
+      <h1 id="boards-title" class="page__title">Meus quadros</h1>
+    </div>
+  </header>
+
+  @switch (status()) {
+    @case ('loading') {
+      <ul class="grid" aria-busy="true" aria-label="Carregando quadros">
+        @for (item of skeletons; track item) {
+          <li class="skeleton"></li>
+        }
+      </ul>
+    }
+    @case ('error') {
+      <app-empty-state
+        icon="alert"
+        tone="danger"
+        heading="Não foi possível carregar seus quadros"
+        [description]="error() ?? undefined"
+      >
+        <button type="button" class="btn btn--primary" (click)="reload()">
+          <app-icon name="refresh" [size]="16" />
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    }
+    @default {
+      @if (boards().length === 0) {
+        <app-empty-state
+          heading="Nenhum quadro ainda"
+          description="Crie um quadro para organizar as tarefas do seu time em colunas."
+        />
+      } @else {
+        <ul class="grid">
+          @for (board of boards(); track board.id) {
+            <li><app-board-tile [board]="board" /></li>
+          }
+        </ul>
+      }
+    }
+  }
+</section>

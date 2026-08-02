@@ -1,6 +1,9 @@
+import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import localePt from '@angular/common/locales/pt';
 import {
   ApplicationConfig,
+  LOCALE_ID,
   isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
@@ -20,10 +23,13 @@ import { AppState } from './core/store/app.state';
 import { mockApiErrorInterceptor } from './mock-api/mock-api-error.interceptor';
 import { provideMockApi } from './mock-api/provide-mock-api';
 
+registerLocaleData(localePt);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideRouter(routes, withComponentInputBinding()),
     // The mock error normalizer must stay last (closest to the backend).
     provideHttpClient(withInterceptors([authInterceptor, mockApiErrorInterceptor])),

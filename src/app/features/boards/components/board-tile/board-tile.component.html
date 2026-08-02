@@ -1,0 +1,7 @@
+<a class="tile" [routerLink]="['/boards', board().id]">
+  <span class="tile__cover" aria-hidden="true"> <span></span><span></span><span></span> </span>
+  <span class="tile__body">
+    <span class="tile__title">{{ board().title }}</span>
+    <span class="tile__meta">Criado em {{ board().createdAt | date: 'd MMM y' }}</span>
+  </span>
+</a>

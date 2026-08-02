@@ -1,0 +1,76 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--board-color) 60%, var(--border));
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &__cover {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    height: 88px;
+    padding: 16px;
+    background: linear-gradient(
+      135deg,
+      var(--board-color),
+      color-mix(in srgb, var(--board-color) 55%, #000)
+    );
+
+    span {
+      width: 22%;
+      border-radius: 4px;
+      background: rgb(255 255 255 / 30%);
+
+      &:nth-child(1) {
+        height: 48px;
+      }
+
+      &:nth-child(2) {
+        height: 34px;
+      }
+
+      &:nth-child(3) {
+        height: 22px;
+      }
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 3rem 1rem 1rem;
+  }
+
+  &__title {
+    overflow: hidden;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    color: var(--text-subtle);
+    font-size: 0.8rem;
+  }
+}
