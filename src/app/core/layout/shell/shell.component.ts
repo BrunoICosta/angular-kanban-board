@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { ToastContainerComponent } from '../../notifications/toast-container.component';
 import { HeaderComponent } from '../header/header.component';
 
 /** Authenticated application frame: sticky header + routed content. */
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, ToastContainerComponent],
   template: `
     <app-header />
     <main id="main" class="shell__main" tabindex="-1">
       <router-outlet />
     </main>
+    <app-toast-container />
   `,
   styles: `
     :host {
