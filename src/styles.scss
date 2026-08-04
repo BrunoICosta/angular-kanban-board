@@ -425,3 +425,69 @@ textarea.input {
     }
   }
 }
+
+/* ==========================================================================
+   Dialogs (CDK Dialog)
+   ========================================================================== */
+.dialog-backdrop {
+  background: var(--backdrop);
+  backdrop-filter: blur(2px);
+}
+
+.dialog-panel {
+  max-height: calc(100dvh - 2rem);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 520px;
+  max-width: 100%;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-lg);
+  animation: dialog-in 160ms ease-out;
+
+  &--sm {
+    width: 420px;
+  }
+
+  &--lg {
+    width: 720px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__title {
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+
+  &__body {
+    color: var(--text-muted);
+  }
+
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}

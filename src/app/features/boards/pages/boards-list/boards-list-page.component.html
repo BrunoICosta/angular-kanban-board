@@ -4,6 +4,10 @@
       <p class="page__eyebrow">Olá, {{ user()?.name ?? 'visitante' }}</p>
       <h1 id="boards-title" class="page__title">Meus quadros</h1>
     </div>
+    <button type="button" class="btn btn--primary" (click)="createBoard()">
+      <app-icon name="plus" [size]="16" />
+      Novo quadro
+    </button>
   </header>
 
   @switch (status()) {
@@ -32,12 +36,29 @@
         <app-empty-state
           heading="Nenhum quadro ainda"
           description="Crie um quadro para organizar as tarefas do seu time em colunas."
-        />
+        >
+          <button type="button" class="btn btn--primary" (click)="createBoard()">
+            <app-icon name="plus" [size]="16" />
+            Criar primeiro quadro
+          </button>
+        </app-empty-state>
       } @else {
         <ul class="grid">
           @for (board of boards(); track board.id) {
-            <li><app-board-tile [board]="board" /></li>
+            <li>
+              <app-board-tile
+                [board]="board"
+                (edit)="editBoard($event)"
+                (remove)="deleteBoard($event)"
+              />
+            </li>
           }
+          <li>
+            <button type="button" class="new-tile" (click)="createBoard()">
+              <app-icon name="plus" [size]="20" />
+              Criar novo quadro
+            </button>
+          </li>
         </ul>
       }
     }

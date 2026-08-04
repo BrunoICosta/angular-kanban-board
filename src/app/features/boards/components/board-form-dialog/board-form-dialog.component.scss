@@ -1,0 +1,58 @@
+.colors {
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    margin-bottom: 0.5rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+}
+
+.swatch {
+  cursor: pointer;
+
+  &__dot {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background: var(--swatch);
+    color: #fff;
+    transition:
+      transform var(--transition),
+      box-shadow var(--transition);
+
+    app-icon {
+      opacity: 0;
+    }
+  }
+
+  &:hover &__dot {
+    transform: scale(1.08);
+  }
+
+  input:checked + &__dot {
+    box-shadow:
+      0 0 0 2px var(--bg-elevated),
+      0 0 0 4px var(--swatch);
+
+    app-icon {
+      opacity: 1;
+    }
+  }
+
+  input:focus-visible + &__dot {
+    box-shadow:
+      0 0 0 2px var(--bg-elevated),
+      0 0 0 4px var(--accent),
+      0 0 0 7px var(--accent-soft);
+  }
+}

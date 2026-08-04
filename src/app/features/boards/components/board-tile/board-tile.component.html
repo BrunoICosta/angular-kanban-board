@@ -1,7 +1,39 @@
 <a class="tile" [routerLink]="['/boards', board().id]">
-  <span class="tile__cover" aria-hidden="true"> <span></span><span></span><span></span> </span>
+  <span class="tile__cover" aria-hidden="true"><span></span><span></span><span></span></span>
   <span class="tile__body">
     <span class="tile__title">{{ board().title }}</span>
     <span class="tile__meta">Criado em {{ board().createdAt | date: 'd MMM y' }}</span>
   </span>
 </a>
+
+<button
+  type="button"
+  class="icon-btn tile__menu"
+  [cdkMenuTriggerFor]="menu"
+  [attr.aria-label]="'Ações do quadro ' + board().title"
+>
+  <app-icon name="more" />
+</button>
+
+<ng-template #menu>
+  <div class="menu" cdkMenu>
+    <button
+      type="button"
+      class="menu__item"
+      cdkMenuItem
+      (cdkMenuItemTriggered)="edit.emit(board())"
+    >
+      <app-icon name="edit" [size]="16" />
+      Editar nome e cor
+    </button>
+    <button
+      type="button"
+      class="menu__item menu__item--danger"
+      cdkMenuItem
+      (cdkMenuItemTriggered)="remove.emit(board())"
+    >
+      <app-icon name="trash" [size]="16" />
+      Excluir quadro
+    </button>
+  </div>
+</ng-template>
