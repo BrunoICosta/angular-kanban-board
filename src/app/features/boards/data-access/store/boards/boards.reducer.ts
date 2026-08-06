@@ -2,6 +2,7 @@ import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 
 import { Board } from '../../../models/board.model';
+import { BoardApiActions } from '../board-detail/board-detail.actions';
 import { LoadStatus } from '../load-status.model';
 import { BoardsApiActions, BoardsPageActions } from './boards.actions';
 
@@ -38,6 +39,11 @@ export const boardsFeature = createFeature({
       status: 'error',
       error,
     })),
+
+    // Opening a board directly (deep link) also caches it here.
+    on(BoardApiActions.loadBoardSuccess, (state, { board }) =>
+      boardsAdapter.upsertOne(board, state),
+    ),
 
     // Optimistic writes: apply immediately, undo on failure.
     on(BoardsPageActions.createBoard, (state, { board }) => boardsAdapter.addOne(board, state)),

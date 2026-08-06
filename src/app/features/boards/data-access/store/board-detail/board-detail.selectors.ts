@@ -1,0 +1,43 @@
+import { createSelector } from '@ngrx/store';
+
+import { Card } from '../../../models/card.model';
+import { selectBoardEntities } from '../boards/boards.reducer';
+import { boardDetailFeature } from './board-detail.reducer';
+import { cardsFeature } from './cards.reducer';
+import { columnsFeature } from './columns.reducer';
+
+export const {
+  selectBoardId: selectCurrentBoardId,
+  selectStatus: selectBoardStatus,
+  selectError: selectBoardError,
+} = boardDetailFeature;
+
+export const selectCurrentBoard = createSelector(
+  selectBoardEntities,
+  selectCurrentBoardId,
+  (boards, boardId) => (boardId ? (boards[boardId] ?? null) : null),
+);
+
+/** Columns of the open board, ordered by position. */
+export const selectBoardColumns = createSelector(
+  columnsFeature.selectAllColumns,
+  selectCurrentBoardId,
+  (columns, boardId) => columns.filter((column) => column.boardId === boardId),
+);
+
+export type CardsByColumn = Readonly<Record<string, Card[] | undefined>>;
+
+/** Every card of the open board grouped by column id (each list ordered by position). */
+export const selectCardsByColumn = createSelector(
+  selectBoardColumns,
+  cardsFeature.selectAllCards,
+  (columns, cards): CardsByColumn => {
+    const grouped: Record<string, Card[] | undefined> = Object.fromEntries(
+      columns.map((column) => [column.id, [] as Card[]]),
+    );
+    for (const card of cards) {
+      grouped[card.columnId]?.push(card);
+    }
+    return grouped;
+  },
+);

@@ -1,0 +1,106 @@
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  height: calc(100dvh - var(--header-height));
+}
+
+.board {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  background:
+    radial-gradient(
+      ellipse at top left,
+      color-mix(in srgb, var(--board-color) 14%, transparent),
+      transparent 55%
+    ),
+    var(--bg);
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+
+    @media (min-width: 768px) {
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  &__dot {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: var(--board-color);
+  }
+
+  &__title {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Columns scroll horizontally (with snap on touch screens); cards scroll inside each column. */
+  &__columns {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    gap: 0.85rem;
+    min-height: 0;
+    padding: 0.25rem 1rem 1.25rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 1rem;
+    scroll-snap-type: x proximity;
+
+    @media (min-width: 768px) {
+      padding: 0.25rem 1.5rem 1.5rem;
+      scroll-snap-type: none;
+    }
+
+    > * {
+      scroll-snap-align: start;
+    }
+  }
+}
+
+.skeleton-column {
+  display: flex;
+  flex: 0 0 var(--column-width);
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+}
+
+.skeleton {
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+
+  &--title {
+    width: 45%;
+    height: 14px;
+    margin-bottom: 0.25rem;
+  }
+
+  &--card {
+    height: 64px;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

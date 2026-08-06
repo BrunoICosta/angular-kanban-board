@@ -1,0 +1,45 @@
+<div class="board" [style.--board-color]="boardColor()">
+  <header class="board__header">
+    <a class="icon-btn" routerLink="/boards" aria-label="Voltar para meus quadros">
+      <app-icon name="arrow-left" />
+    </a>
+    <span class="board__dot" aria-hidden="true"></span>
+    <h1 class="board__title">{{ board()?.title ?? 'Carregando…' }}</h1>
+  </header>
+
+  @switch (status()) {
+    @case ('error') {
+      <app-empty-state
+        icon="alert"
+        tone="danger"
+        heading="Não foi possível abrir o quadro"
+        [description]="error() ?? undefined"
+      >
+        <a class="btn btn--ghost" routerLink="/boards">Voltar aos quadros</a>
+        <button type="button" class="btn btn--primary" (click)="reload()">
+          <app-icon name="refresh" [size]="16" />
+          Tentar novamente
+        </button>
+      </app-empty-state>
+    }
+    @case ('loaded') {
+      <div class="board__columns">
+        @for (column of columns(); track column.id) {
+          <app-board-column [column]="column" [cards]="cardsByColumn()[column.id] ?? []" />
+        }
+      </div>
+    }
+    @default {
+      <div class="board__columns" aria-busy="true" aria-label="Carregando colunas">
+        @for (cards of skeletonColumns; track $index) {
+          <div class="skeleton-column">
+            <span class="skeleton skeleton--title"></span>
+            @for (card of cards; track card) {
+              <span class="skeleton skeleton--card"></span>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

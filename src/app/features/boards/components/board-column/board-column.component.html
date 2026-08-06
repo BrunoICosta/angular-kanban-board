@@ -1,0 +1,18 @@
+<section class="column" [attr.aria-labelledby]="'column-title-' + column().id">
+  <header class="column__header">
+    <h2 class="column__title" [id]="'column-title-' + column().id">{{ column().title }}</h2>
+    <span class="column__count" [attr.aria-label]="cards().length + ' cartões'">
+      {{ cards().length }}
+    </span>
+  </header>
+
+  <ul class="column__cards" role="list">
+    @for (card of cards(); track card.id) {
+      <li class="column__card">
+        <app-card-item [card]="card" (open)="openCard.emit($event)" />
+      </li>
+    } @empty {
+      <li class="column__empty">Nenhum cartão</li>
+    }
+  </ul>
+</section>

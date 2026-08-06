@@ -1,0 +1,50 @@
+<button type="button" class="card" (click)="open.emit(card())">
+  @if (labels().length) {
+    <span class="card__labels">
+      @for (label of labels(); track label.id) {
+        <span class="label" [style.--label-color]="label.color">{{ label.name }}</span>
+      }
+    </span>
+  }
+
+  <span class="card__title">{{ card().title }}</span>
+
+  @if (card().dueDate || progress().total || card().description || card().assignee) {
+    <span class="card__meta">
+      @if (card().dueDate; as dueDate) {
+        <span
+          class="badge"
+          [class.badge--danger]="dueStatus() === 'overdue'"
+          [class.badge--warning]="dueStatus() === 'today' || dueStatus() === 'soon'"
+          [attr.title]="dueLabel()"
+        >
+          <app-icon name="calendar" [size]="13" />
+          {{ dueDate | date: 'd MMM' }}
+          <span class="sr-only">({{ dueLabel() }})</span>
+        </span>
+      }
+
+      @if (progress().total) {
+        <span
+          class="badge"
+          [class.badge--success]="progress().complete"
+          [attr.title]="'Checklist: ' + progress().done + ' de ' + progress().total"
+        >
+          <app-icon name="checklist" [size]="13" />
+          {{ progress().done }}/{{ progress().total }}
+        </span>
+      }
+
+      @if (card().description) {
+        <span class="badge badge--plain" title="Possui descrição">
+          <app-icon name="text" [size]="13" />
+          <span class="sr-only">Possui descrição</span>
+        </span>
+      }
+
+      @if (card().assignee; as assignee) {
+        <app-avatar class="card__avatar" [name]="assignee" [size]="24" />
+      }
+    </span>
+  }
+</button>
