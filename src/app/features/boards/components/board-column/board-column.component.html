@@ -4,6 +4,14 @@
     <span class="column__count" [attr.aria-label]="cards().length + ' cartões'">
       {{ cards().length }}
     </span>
+    <button
+      type="button"
+      class="icon-btn icon-btn--sm"
+      [cdkMenuTriggerFor]="menu"
+      [attr.aria-label]="'Ações da coluna ' + column().title"
+    >
+      <app-icon name="more" [size]="16" />
+    </button>
   </header>
 
   <ul class="column__cards" role="list">
@@ -16,3 +24,26 @@
     }
   </ul>
 </section>
+
+<ng-template #menu>
+  <div class="menu" cdkMenu>
+    <button
+      type="button"
+      class="menu__item"
+      cdkMenuItem
+      (cdkMenuItemTriggered)="editColumn.emit(column())"
+    >
+      <app-icon name="edit" [size]="16" />
+      Renomear e limite WIP
+    </button>
+    <button
+      type="button"
+      class="menu__item menu__item--danger"
+      cdkMenuItem
+      (cdkMenuItemTriggered)="deleteColumn.emit(column())"
+    >
+      <app-icon name="trash" [size]="16" />
+      Excluir coluna
+    </button>
+  </div>
+</ng-template>

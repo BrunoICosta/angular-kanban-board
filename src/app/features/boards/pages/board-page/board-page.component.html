@@ -23,10 +23,26 @@
       </app-empty-state>
     }
     @case ('loaded') {
+      @if (columns().length === 0) {
+        <app-empty-state
+          heading="Este quadro ainda não tem colunas"
+          description="Crie colunas para representar as etapas do seu fluxo de trabalho."
+        >
+          <button type="button" class="btn btn--primary" (click)="addDefaultColumns()">
+            Usar colunas padrão
+          </button>
+        </app-empty-state>
+      }
       <div class="board__columns">
         @for (column of columns(); track column.id) {
-          <app-board-column [column]="column" [cards]="cardsByColumn()[column.id] ?? []" />
+          <app-board-column
+            [column]="column"
+            [cards]="cardsByColumn()[column.id] ?? []"
+            (editColumn)="editColumn($event)"
+            (deleteColumn)="deleteColumn($event)"
+          />
         }
+        <app-add-column (add)="addColumn($event)" />
       </div>
     }
     @default {

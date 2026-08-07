@@ -18,6 +18,15 @@ export const cardsFeature = createFeature({
     initialCardsState,
     on(BoardPageActions.opened, (state) => cardsAdapter.removeAll(state)),
     on(BoardApiActions.loadBoardSuccess, (state, { cards }) => cardsAdapter.setAll(cards, state)),
+    on(BoardPageActions.deleteColumn, (state, { cards }) =>
+      cardsAdapter.removeMany(
+        cards.map((card) => card.id),
+        state,
+      ),
+    ),
+    on(BoardApiActions.deleteColumnFailure, (state, { cards }) =>
+      cardsAdapter.addMany(cards, state),
+    ),
   ),
   extraSelectors: ({ selectCardsState }) => {
     const { selectAll, selectEntities } = cardsAdapter.getSelectors(selectCardsState);

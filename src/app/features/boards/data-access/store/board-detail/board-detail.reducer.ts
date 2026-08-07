@@ -8,13 +8,33 @@ export interface BoardDetailState {
   boardId: string | null;
   status: LoadStatus;
   error: string | null;
+  /** Number of optimistic writes still waiting for the server (drives the "saving" badge). */
+  pendingSaves: number;
 }
 
 export const initialBoardDetailState: BoardDetailState = {
   boardId: null,
   status: 'idle',
   error: null,
+  pendingSaves: 0,
 };
+
+/** Optimistic writes started by the user... */
+const writeStarted = [
+  BoardPageActions.addColumn,
+  BoardPageActions.updateColumn,
+  BoardPageActions.deleteColumn,
+] as const;
+
+/** ...and the API results that settle them (success or rollback). */
+const writeSettled = [
+  BoardApiActions.addColumnSuccess,
+  BoardApiActions.addColumnFailure,
+  BoardApiActions.updateColumnSuccess,
+  BoardApiActions.updateColumnFailure,
+  BoardApiActions.deleteColumnSuccess,
+  BoardApiActions.deleteColumnFailure,
+] as const;
 
 export const boardDetailFeature = createFeature({
   name: 'boardDetail',
@@ -34,6 +54,14 @@ export const boardDetailFeature = createFeature({
       ...state,
       status: 'error',
       error,
+    })),
+    on(...writeStarted, (state): BoardDetailState => ({
+      ...state,
+      pendingSaves: state.pendingSaves + 1,
+    })),
+    on(...writeSettled, (state): BoardDetailState => ({
+      ...state,
+      pendingSaves: Math.max(0, state.pendingSaves - 1),
     })),
   ),
 });
