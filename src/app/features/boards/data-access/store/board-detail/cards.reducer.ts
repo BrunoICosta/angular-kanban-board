@@ -27,6 +27,14 @@ export const cardsFeature = createFeature({
     on(BoardApiActions.deleteColumnFailure, (state, { cards }) =>
       cardsAdapter.addMany(cards, state),
     ),
+
+    // Optimistic writes: apply immediately, undo on failure.
+    on(BoardPageActions.addCard, (state, { card }) => cardsAdapter.addOne(card, state)),
+    on(BoardApiActions.addCardFailure, (state, { card }) => cardsAdapter.removeOne(card.id, state)),
+    on(BoardPageActions.moveCard, (state, { moved }) => cardsAdapter.upsertMany(moved, state)),
+    on(BoardApiActions.moveCardFailure, (state, { previous }) =>
+      cardsAdapter.upsertMany(previous, state),
+    ),
   ),
   extraSelectors: ({ selectCardsState }) => {
     const { selectAll, selectEntities } = cardsAdapter.getSelectors(selectCardsState);

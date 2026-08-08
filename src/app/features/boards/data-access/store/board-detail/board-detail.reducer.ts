@@ -24,6 +24,8 @@ const writeStarted = [
   BoardPageActions.addColumn,
   BoardPageActions.updateColumn,
   BoardPageActions.deleteColumn,
+  BoardPageActions.addCard,
+  BoardPageActions.moveCard,
 ] as const;
 
 /** ...and the API results that settle them (success or rollback). */
@@ -34,6 +36,10 @@ const writeSettled = [
   BoardApiActions.updateColumnFailure,
   BoardApiActions.deleteColumnSuccess,
   BoardApiActions.deleteColumnFailure,
+  BoardApiActions.addCardSuccess,
+  BoardApiActions.addCardFailure,
+  BoardApiActions.moveCardSuccess,
+  BoardApiActions.moveCardFailure,
 ] as const;
 
 export const boardDetailFeature = createFeature({

@@ -20,7 +20,11 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { createId } from '../../../../shared/utils/id';
 import { AddColumnComponent } from '../../components/add-column/add-column.component';
-import { BoardColumnComponent } from '../../components/board-column/board-column.component';
+import {
+  BoardColumnComponent,
+  CARD_LIST_ID_PREFIX,
+  CardDropEvent,
+} from '../../components/board-column/board-column.component';
 import {
   ColumnFormDialogComponent,
   ColumnFormResult,
@@ -33,7 +37,9 @@ import {
   selectCardsByColumn,
   selectCurrentBoard,
 } from '../../data-access/store/board-detail/board-detail.selectors';
+import { moveCard } from '../../data-access/utils/reorder';
 import { boardColorValue } from '../../models/board.model';
+import { Card } from '../../models/card.model';
 import { Column } from '../../models/column.model';
 
 const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
@@ -69,6 +75,10 @@ export class BoardPageComponent {
     const board = this.board();
     return board ? boardColorValue(board.color) : 'var(--accent)';
   });
+  /** Every card list is connected to every other one, so cards can move between columns. */
+  protected readonly cardListIds = computed(() =>
+    this.columns().map((column) => CARD_LIST_ID_PREFIX + column.id),
+  );
   protected readonly skeletonColumns = [
     [1, 2, 3, 4],
     [1, 2],
@@ -127,6 +137,31 @@ export class BoardPageComponent {
       .confirm({ title: 'Excluir coluna?', message, confirmLabel: 'Excluir coluna' })
       .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.store.dispatch(BoardPageActions.deleteColumn({ column, cards })));
+  }
+
+  protected addCard({ column, title }: { column: Column; title: string }): void {
+    const cards = this.cardsByColumn()[column.id] ?? [];
+    const card: Card = {
+      id: createId(),
+      boardId: column.boardId,
+      columnId: column.id,
+      position: cards.length,
+      title,
+      description: '',
+      labels: [],
+      dueDate: null,
+      checklist: [],
+      assignee: null,
+      createdAt: new Date().toISOString(),
+    };
+    this.store.dispatch(BoardPageActions.addCard({ card }));
+  }
+
+  protected dropCard({ cardId, toColumnId, toIndex }: CardDropEvent): void {
+    const { moved, previous } = moveCard(this.cardsByColumn(), cardId, toColumnId, toIndex);
+    if (moved.length) {
+      this.store.dispatch(BoardPageActions.moveCard({ moved, previous }));
+    }
   }
 
   private load(boardId: string): void {

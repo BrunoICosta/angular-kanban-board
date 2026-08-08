@@ -1,14 +1,35 @@
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
+import { InlineAddFormComponent } from '../../../../shared/ui/inline-add-form/inline-add-form.component';
 import { Card } from '../../models/card.model';
 import { Column } from '../../models/column.model';
 import { CardItemComponent } from '../card-item/card-item.component';
 
+export interface CardDropEvent {
+  cardId: string;
+  toColumnId: string;
+  toIndex: number;
+}
+
+/** Prefix of every card drop list id; columns connect to each other through it. */
+export const CARD_LIST_ID_PREFIX = 'card-list-';
+
 @Component({
   selector: 'app-board-column',
-  imports: [CardItemComponent, IconComponent, CdkMenuTrigger, CdkMenu, CdkMenuItem],
+  imports: [
+    CardItemComponent,
+    IconComponent,
+    InlineAddFormComponent,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
+  ],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,7 +37,24 @@ import { CardItemComponent } from '../card-item/card-item.component';
 export class BoardColumnComponent {
   readonly column = input.required<Column>();
   readonly cards = input.required<Card[]>();
+  /** Ids of the other card lists this column accepts cards from / sends cards to. */
+  readonly connectedTo = input<string[]>([]);
+
   readonly openCard = output<Card>();
   readonly editColumn = output<Column>();
   readonly deleteColumn = output<Column>();
+  readonly addCard = output<{ column: Column; title: string }>();
+  readonly cardDropped = output<CardDropEvent>();
+
+  protected readonly listId = computed(() => CARD_LIST_ID_PREFIX + this.column().id);
+  /** Short press-and-hold on touch screens so a swipe still scrolls the board. */
+  protected readonly dragStartDelay = { touch: 180, mouse: 0 };
+
+  protected onDrop(event: CdkDragDrop<Card[], Card[], string>): void {
+    this.cardDropped.emit({
+      cardId: event.item.data,
+      toColumnId: this.column().id,
+      toIndex: event.currentIndex,
+    });
+  }
 }

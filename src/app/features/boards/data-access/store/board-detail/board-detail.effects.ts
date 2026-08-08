@@ -91,6 +91,38 @@ export class BoardDetailEffects {
     ),
   );
 
+  readonly addCard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardPageActions.addCard),
+      mergeMap(({ card }) =>
+        this.cardsApi.create(card).pipe(
+          map((saved) => BoardApiActions.addCardSuccess({ card: saved })),
+          catchError((error: unknown) =>
+            of(BoardApiActions.addCardFailure({ card, error: toErrorMessage(error) })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  /**
+   * Moves are persisted in order (`concatMap`) so the server sees them in the same sequence
+   * the user made them. On failure the reducer restores the cards' previous positions.
+   */
+  readonly moveCard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardPageActions.moveCard),
+      concatMap(({ moved, previous }) =>
+        this.cardsApi.updateMany(moved).pipe(
+          map((cards) => BoardApiActions.moveCardSuccess({ cards })),
+          catchError((error: unknown) =>
+            of(BoardApiActions.moveCardFailure({ previous, error: toErrorMessage(error) })),
+          ),
+        ),
+      ),
+    ),
+  );
+
   /** Every failed optimistic write has already been rolled back by the reducers; tell the user. */
   readonly notifyRollback$ = createEffect(
     () =>
@@ -99,6 +131,8 @@ export class BoardDetailEffects {
           BoardApiActions.addColumnFailure,
           BoardApiActions.updateColumnFailure,
           BoardApiActions.deleteColumnFailure,
+          BoardApiActions.addCardFailure,
+          BoardApiActions.moveCardFailure,
         ),
         tap(({ error }) => this.notifications.error(`${error} A alteração foi desfeita.`)),
       ),

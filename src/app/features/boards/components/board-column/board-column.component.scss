@@ -55,6 +55,14 @@
     list-style: none;
   }
 
+  &__card {
+    cursor: grab;
+  }
+
+  &__footer {
+    padding: 0 0.5rem 0.5rem;
+  }
+
   &__empty {
     padding: 0.9rem 0.5rem;
     border: 1.5px dashed var(--border);
@@ -63,4 +71,17 @@
     font-size: 0.82rem;
     text-align: center;
   }
+}
+
+/* The empty hint disappears while a card is dragged over the column. */
+.cdk-drop-list-dragging .column__empty,
+.cdk-drop-list-receiving .column__empty {
+  display: none;
+}
+
+.card-placeholder {
+  min-height: 64px;
+  border: 1.5px dashed var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
 }

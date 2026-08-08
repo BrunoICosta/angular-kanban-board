@@ -14,15 +14,33 @@
     </button>
   </header>
 
-  <ul class="column__cards" role="list">
+  <ul
+    class="column__cards"
+    role="list"
+    cdkDropList
+    [id]="listId()"
+    [cdkDropListData]="cards()"
+    [cdkDropListConnectedTo]="connectedTo()"
+    (cdkDropListDropped)="onDrop($event)"
+  >
     @for (card of cards(); track card.id) {
-      <li class="column__card">
+      <li class="column__card" cdkDrag [cdkDragData]="card.id" [cdkDragStartDelay]="dragStartDelay">
         <app-card-item [card]="card" (open)="openCard.emit($event)" />
+        <div class="card-placeholder" *cdkDragPlaceholder></div>
       </li>
     } @empty {
-      <li class="column__empty">Nenhum cartão</li>
+      <li class="column__empty">Arraste um cartão para cá</li>
     }
   </ul>
+
+  <footer class="column__footer">
+    <app-inline-add-form
+      triggerLabel="Adicionar cartão"
+      [inputLabel]="'Título do novo cartão em ' + column().title"
+      placeholder="O que precisa ser feito?"
+      (submitted)="addCard.emit({ column: column(), title: $event })"
+    />
+  </footer>
 </section>
 
 <ng-template #menu>

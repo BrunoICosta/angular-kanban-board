@@ -39,7 +39,10 @@
             [column]="column"
             [cards]="cardsByColumn()[column.id] ?? []"
             (editColumn)="editColumn($event)"
+            [connectedTo]="cardListIds()"
             (deleteColumn)="deleteColumn($event)"
+            (addCard)="addCard($event)"
+            (cardDropped)="dropCard($event)"
           />
         }
         <app-add-column (add)="addColumn($event)" />

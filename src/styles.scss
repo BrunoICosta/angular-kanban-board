@@ -491,3 +491,29 @@ textarea.input {
     transform: translateY(8px) scale(0.98);
   }
 }
+
+/* ==========================================================================
+   Drag and drop (CDK). The preview is attached to <body>, so it is styled globally.
+   ========================================================================== */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  list-style: none;
+  transform-origin: center;
+  rotate: 2deg;
+  cursor: grabbing;
+}
+
+.cdk-drag-animating {
+  transition: transform 220ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
+  transition: transform 220ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+body:has(.cdk-drag-preview) {
+  cursor: grabbing;
+  user-select: none;
+}
