@@ -34,17 +34,33 @@
         </app-empty-state>
       }
       <div class="board__columns">
-        @for (column of columns(); track column.id) {
-          <app-board-column
-            [column]="column"
-            [cards]="cardsByColumn()[column.id] ?? []"
-            (editColumn)="editColumn($event)"
-            [connectedTo]="cardListIds()"
-            (deleteColumn)="deleteColumn($event)"
-            (addCard)="addCard($event)"
-            (cardDropped)="dropCard($event)"
-          />
-        }
+        <div
+          class="board__lane"
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          [cdkDropListData]="columns()"
+          (cdkDropListDropped)="dropColumn($event)"
+        >
+          @for (column of columns(); track column.id; let index = $index, last = $last) {
+            <app-board-column
+              cdkDrag
+              [cdkDragData]="column.id"
+              [cdkDragStartDelay]="dragStartDelay"
+              [column]="column"
+              [cards]="cardsByColumn()[column.id] ?? []"
+              [connectedTo]="cardListIds()"
+              [canMoveLeft]="index > 0"
+              [canMoveRight]="!last"
+              (editColumn)="editColumn($event)"
+              (deleteColumn)="deleteColumn($event)"
+              (moveColumn)="shiftColumn(index, $event)"
+              (addCard)="addCard($event)"
+              (cardDropped)="dropCard($event)"
+            >
+              <div class="column-placeholder" *cdkDragPlaceholder></div>
+            </app-board-column>
+          }
+        </div>
         <app-add-column (add)="addColumn($event)" />
       </div>
     }

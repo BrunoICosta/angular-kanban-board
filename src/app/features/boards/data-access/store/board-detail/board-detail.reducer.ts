@@ -24,6 +24,7 @@ const writeStarted = [
   BoardPageActions.addColumn,
   BoardPageActions.updateColumn,
   BoardPageActions.deleteColumn,
+  BoardPageActions.moveColumn,
   BoardPageActions.addCard,
   BoardPageActions.moveCard,
 ] as const;
@@ -36,6 +37,8 @@ const writeSettled = [
   BoardApiActions.updateColumnFailure,
   BoardApiActions.deleteColumnSuccess,
   BoardApiActions.deleteColumnFailure,
+  BoardApiActions.moveColumnSuccess,
+  BoardApiActions.moveColumnFailure,
   BoardApiActions.addCardSuccess,
   BoardApiActions.addCardFailure,
   BoardApiActions.moveCardSuccess,

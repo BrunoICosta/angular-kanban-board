@@ -91,6 +91,20 @@ export class BoardDetailEffects {
     ),
   );
 
+  readonly moveColumn$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardPageActions.moveColumn),
+      concatMap(({ moved, previous }) =>
+        this.columnsApi.updateMany(moved).pipe(
+          map((columns) => BoardApiActions.moveColumnSuccess({ columns })),
+          catchError((error: unknown) =>
+            of(BoardApiActions.moveColumnFailure({ previous, error: toErrorMessage(error) })),
+          ),
+        ),
+      ),
+    ),
+  );
+
   readonly addCard$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BoardPageActions.addCard),
@@ -131,6 +145,7 @@ export class BoardDetailEffects {
           BoardApiActions.addColumnFailure,
           BoardApiActions.updateColumnFailure,
           BoardApiActions.deleteColumnFailure,
+          BoardApiActions.moveColumnFailure,
           BoardApiActions.addCardFailure,
           BoardApiActions.moveCardFailure,
         ),

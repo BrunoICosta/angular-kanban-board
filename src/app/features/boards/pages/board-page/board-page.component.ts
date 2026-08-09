@@ -1,4 +1,5 @@
 import { Dialog } from '@angular/cdk/dialog';
+import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -37,7 +38,7 @@ import {
   selectCardsByColumn,
   selectCurrentBoard,
 } from '../../data-access/store/board-detail/board-detail.selectors';
-import { moveCard } from '../../data-access/utils/reorder';
+import { moveCard, reorderColumns } from '../../data-access/utils/reorder';
 import { boardColorValue } from '../../models/board.model';
 import { Card } from '../../models/card.model';
 import { Column } from '../../models/column.model';
@@ -52,6 +53,9 @@ const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
     EmptyStateComponent,
     BoardColumnComponent,
     AddColumnComponent,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
   ],
   templateUrl: './board-page.component.html',
   styleUrl: './board-page.component.scss',
@@ -79,6 +83,7 @@ export class BoardPageComponent {
   protected readonly cardListIds = computed(() =>
     this.columns().map((column) => CARD_LIST_ID_PREFIX + column.id),
   );
+  protected readonly dragStartDelay = { touch: 180, mouse: 0 };
   protected readonly skeletonColumns = [
     [1, 2, 3, 4],
     [1, 2],
@@ -161,6 +166,22 @@ export class BoardPageComponent {
     const { moved, previous } = moveCard(this.cardsByColumn(), cardId, toColumnId, toIndex);
     if (moved.length) {
       this.store.dispatch(BoardPageActions.moveCard({ moved, previous }));
+    }
+  }
+
+  protected dropColumn(event: CdkDragDrop<Column[]>): void {
+    this.reorderColumn(event.previousIndex, event.currentIndex);
+  }
+
+  /** Menu alternative to dragging: moves a column one slot left (-1) or right (+1). */
+  protected shiftColumn(index: number, direction: -1 | 1): void {
+    this.reorderColumn(index, index + direction);
+  }
+
+  private reorderColumn(fromIndex: number, toIndex: number): void {
+    const { moved, previous } = reorderColumns(this.columns(), fromIndex, toIndex);
+    if (moved.length) {
+      this.store.dispatch(BoardPageActions.moveColumn({ moved, previous }));
     }
   }
 

@@ -517,3 +517,7 @@ body:has(.cdk-drag-preview) {
   cursor: grabbing;
   user-select: none;
 }
+
+.flip {
+  transform: scaleX(-1);
+}

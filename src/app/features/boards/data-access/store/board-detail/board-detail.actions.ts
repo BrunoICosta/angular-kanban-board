@@ -14,6 +14,8 @@ export const BoardPageActions = createActionGroup({
     'Update Column': props<{ column: Column; previous: Column }>(),
     /** `cards` are the column's cards, removed with it and restored on failure. */
     'Delete Column': props<{ column: Column; cards: Card[] }>(),
+    /** Drag & drop result: columns with their new positions and their previous values. */
+    'Move Column': props<{ moved: Column[]; previous: Column[] }>(),
     'Add Card': props<{ card: Card }>(),
     /** Drag & drop result: cards with their new column/position and their previous values. */
     'Move Card': props<{ moved: Card[]; previous: Card[] }>(),
@@ -32,6 +34,8 @@ export const BoardApiActions = createActionGroup({
     'Update Column Failure': props<{ previous: Column; error: string }>(),
     'Delete Column Success': props<{ column: Column }>(),
     'Delete Column Failure': props<{ column: Column; cards: Card[]; error: string }>(),
+    'Move Column Success': props<{ columns: Column[] }>(),
+    'Move Column Failure': props<{ previous: Column[]; error: string }>(),
     'Add Card Success': props<{ card: Card }>(),
     'Add Card Failure': props<{ card: Card; error: string }>(),
     'Move Card Success': props<{ cards: Card[] }>(),

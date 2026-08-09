@@ -1,5 +1,6 @@
 <section class="column" [attr.aria-labelledby]="'column-title-' + column().id">
-  <header class="column__header">
+  <header class="column__header" cdkDragHandle>
+    <app-icon class="column__grip" name="grip" [size]="14" />
     <h2 class="column__title" [id]="'column-title-' + column().id">{{ column().title }}</h2>
     <span class="column__count" [attr.aria-label]="cards().length + ' cartões'">
       {{ cards().length }}
@@ -54,6 +55,28 @@
       <app-icon name="edit" [size]="16" />
       Renomear e limite WIP
     </button>
+    @if (canMoveLeft()) {
+      <button
+        type="button"
+        class="menu__item"
+        cdkMenuItem
+        (cdkMenuItemTriggered)="moveColumn.emit(-1)"
+      >
+        <app-icon name="arrow-left" [size]="16" />
+        Mover para a esquerda
+      </button>
+    }
+    @if (canMoveRight()) {
+      <button
+        type="button"
+        class="menu__item"
+        cdkMenuItem
+        (cdkMenuItemTriggered)="moveColumn.emit(1)"
+      >
+        <app-icon class="flip" name="arrow-left" [size]="16" />
+        Mover para a direita
+      </button>
+    }
     <button
       type="button"
       class="menu__item menu__item--danger"

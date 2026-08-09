@@ -1,4 +1,10 @@
-import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDragPlaceholder,
+  CdkDropList,
+} from '@angular/cdk/drag-drop';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 
@@ -26,6 +32,7 @@ export const CARD_LIST_ID_PREFIX = 'card-list-';
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,
+    CdkDragHandle,
     CdkMenuTrigger,
     CdkMenu,
     CdkMenuItem,
@@ -39,12 +46,16 @@ export class BoardColumnComponent {
   readonly cards = input.required<Card[]>();
   /** Ids of the other card lists this column accepts cards from / sends cards to. */
   readonly connectedTo = input<string[]>([]);
+  /** Whether the column can move left/right (keyboard-friendly alternative to dragging). */
+  readonly canMoveLeft = input(false);
+  readonly canMoveRight = input(false);
 
   readonly openCard = output<Card>();
   readonly editColumn = output<Column>();
   readonly deleteColumn = output<Column>();
   readonly addCard = output<{ column: Column; title: string }>();
   readonly cardDropped = output<CardDropEvent>();
+  readonly moveColumn = output<-1 | 1>();
 
   protected readonly listId = computed(() => CARD_LIST_ID_PREFIX + this.column().id);
   /** Short press-and-hold on touch screens so a swipe still scrolls the board. */

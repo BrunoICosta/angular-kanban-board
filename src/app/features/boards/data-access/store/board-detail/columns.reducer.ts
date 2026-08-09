@@ -38,6 +38,10 @@ export const columnsFeature = createFeature({
     on(BoardApiActions.deleteColumnFailure, (state, { column }) =>
       columnsAdapter.addOne(column, state),
     ),
+    on(BoardPageActions.moveColumn, (state, { moved }) => columnsAdapter.upsertMany(moved, state)),
+    on(BoardApiActions.moveColumnFailure, (state, { previous }) =>
+      columnsAdapter.upsertMany(previous, state),
+    ),
   ),
   extraSelectors: ({ selectColumnsState }) => {
     const { selectAll, selectEntities } = columnsAdapter.getSelectors(selectColumnsState);
