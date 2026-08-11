@@ -13,7 +13,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { filter } from 'rxjs';
+import { filter, from, switchMap } from 'rxjs';
 
 import { ConfirmDialogService } from '../../../../shared/ui/confirm-dialog/confirm-dialog.service';
 import { dialogConfig } from '../../../../shared/ui/dialog.config';
@@ -26,6 +26,10 @@ import {
   CARD_LIST_ID_PREFIX,
   CardDropEvent,
 } from '../../components/board-column/board-column.component';
+import type {
+  CardDetailDialogData,
+  CardDetailResult,
+} from '../../components/card-detail-dialog/card-detail-dialog.component';
 import {
   ColumnFormDialogComponent,
   ColumnFormResult,
@@ -160,6 +164,49 @@ export class BoardPageComponent {
       createdAt: new Date().toISOString(),
     };
     this.store.dispatch(BoardPageActions.addCard({ card }));
+  }
+
+  /** The detail dialog is the heaviest piece of UI, so it is lazy-loaded on first use. */
+  protected openCard(card: Card): void {
+    from(import('../../components/card-detail-dialog/card-detail-dialog.component'))
+      .pipe(
+        switchMap(
+          ({ CardDetailDialogComponent }) =>
+            this.dialog.open<CardDetailResult, CardDetailDialogData>(CardDetailDialogComponent, {
+              ...dialogConfig,
+              data: { card, columns: this.columns() },
+              ariaLabelledBy: 'card-dialog-title',
+            }).closed,
+        ),
+        filter((result): result is CardDetailResult => !!result),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) =>
+        result.type === 'delete' ? this.deleteCard(card) : this.saveCard(card, result.card),
+      );
+  }
+
+  private saveCard(previous: Card, edited: Card): void {
+    // Content edits and column changes are separate writes: an update, then a regular move.
+    const updated: Card = { ...edited, columnId: previous.columnId, position: previous.position };
+    if (JSON.stringify(updated) !== JSON.stringify(previous)) {
+      this.store.dispatch(BoardPageActions.updateCard({ card: updated, previous }));
+    }
+    if (edited.columnId !== previous.columnId) {
+      const target = this.cardsByColumn()[edited.columnId] ?? [];
+      this.dropCard({ cardId: previous.id, toColumnId: edited.columnId, toIndex: target.length });
+    }
+  }
+
+  private deleteCard(card: Card): void {
+    this.confirmDialog
+      .confirm({
+        title: 'Excluir cartão?',
+        message: `"${card.title}" será excluído permanentemente.`,
+        confirmLabel: 'Excluir cartão',
+      })
+      .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.store.dispatch(BoardPageActions.deleteCard({ card })));
   }
 
   protected dropCard({ cardId, toColumnId, toIndex }: CardDropEvent): void {

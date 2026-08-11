@@ -31,6 +31,12 @@ export const cardsFeature = createFeature({
     // Optimistic writes: apply immediately, undo on failure.
     on(BoardPageActions.addCard, (state, { card }) => cardsAdapter.addOne(card, state)),
     on(BoardApiActions.addCardFailure, (state, { card }) => cardsAdapter.removeOne(card.id, state)),
+    on(BoardPageActions.updateCard, (state, { card }) => cardsAdapter.upsertOne(card, state)),
+    on(BoardApiActions.updateCardFailure, (state, { previous }) =>
+      cardsAdapter.upsertOne(previous, state),
+    ),
+    on(BoardPageActions.deleteCard, (state, { card }) => cardsAdapter.removeOne(card.id, state)),
+    on(BoardApiActions.deleteCardFailure, (state, { card }) => cardsAdapter.addOne(card, state)),
     on(BoardPageActions.moveCard, (state, { moved }) => cardsAdapter.upsertMany(moved, state)),
     on(BoardApiActions.moveCardFailure, (state, { previous }) =>
       cardsAdapter.upsertMany(previous, state),

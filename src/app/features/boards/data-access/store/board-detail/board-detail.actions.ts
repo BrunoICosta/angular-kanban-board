@@ -17,6 +17,8 @@ export const BoardPageActions = createActionGroup({
     /** Drag & drop result: columns with their new positions and their previous values. */
     'Move Column': props<{ moved: Column[]; previous: Column[] }>(),
     'Add Card': props<{ card: Card }>(),
+    'Update Card': props<{ card: Card; previous: Card }>(),
+    'Delete Card': props<{ card: Card }>(),
     /** Drag & drop result: cards with their new column/position and their previous values. */
     'Move Card': props<{ moved: Card[]; previous: Card[] }>(),
   },
@@ -38,6 +40,10 @@ export const BoardApiActions = createActionGroup({
     'Move Column Failure': props<{ previous: Column[]; error: string }>(),
     'Add Card Success': props<{ card: Card }>(),
     'Add Card Failure': props<{ card: Card; error: string }>(),
+    'Update Card Success': props<{ card: Card }>(),
+    'Update Card Failure': props<{ previous: Card; error: string }>(),
+    'Delete Card Success': props<{ card: Card }>(),
+    'Delete Card Failure': props<{ card: Card; error: string }>(),
     'Move Card Success': props<{ cards: Card[] }>(),
     'Move Card Failure': props<{ previous: Card[]; error: string }>(),
   },

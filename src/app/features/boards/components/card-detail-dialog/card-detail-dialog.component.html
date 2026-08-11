@@ -1,0 +1,99 @@
+<form class="dialog dialog--lg detail" [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <header class="dialog__header">
+    <div class="detail__heading">
+      <label class="sr-only" for="card-title">Título do cartão</label>
+      <textarea
+        id="card-title"
+        class="detail__title"
+        rows="1"
+        formControlName="title"
+        [attr.maxlength]="titleMax"
+        [attr.aria-invalid]="form.controls.title.invalid && form.controls.title.touched"
+      ></textarea>
+      <span id="card-dialog-title" class="sr-only">Detalhes do cartão {{ data.card.title }}</span>
+      @if (form.controls.title.touched && form.controls.title.invalid) {
+        <span class="field__error">O cartão precisa de um título.</span>
+      }
+      <span class="detail__created">
+        Criado em {{ data.card.createdAt | date: "d 'de' MMMM 'de' y" }}
+      </span>
+    </div>
+    <button type="button" class="icon-btn" aria-label="Fechar" (click)="ref.close()">
+      <app-icon name="x" />
+    </button>
+  </header>
+
+  <div class="detail__layout">
+    <div class="detail__main">
+      <div class="field">
+        <label class="field__label" for="card-description">Descrição</label>
+        <textarea
+          id="card-description"
+          class="input"
+          rows="5"
+          formControlName="description"
+          placeholder="Adicione mais detalhes, links ou critérios de aceite…"
+          [attr.maxlength]="descriptionMax"
+        ></textarea>
+      </div>
+    </div>
+
+    <aside class="detail__side">
+      <div class="field">
+        <label class="field__label" for="card-column">Coluna</label>
+        <select id="card-column" class="input" formControlName="columnId">
+          @for (column of data.columns; track column.id) {
+            <option [value]="column.id">{{ column.title }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="card-assignee">Responsável</label>
+        <div class="assignee">
+          <app-avatar [name]="assignee() || null" [size]="32" />
+          <input
+            id="card-assignee"
+            class="input"
+            formControlName="assignee"
+            placeholder="Nome da pessoa"
+            maxlength="60"
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="card-due">Prazo</label>
+        <input id="card-due" class="input" type="date" formControlName="dueDate" />
+      </div>
+
+      <fieldset class="labels">
+        <legend class="field__label">Etiquetas</legend>
+        <div class="labels__list">
+          @for (label of allLabels; track label.id) {
+            <button
+              type="button"
+              class="chip"
+              [style.--label-color]="label.color"
+              [class.chip--active]="selectedLabels().includes(label.id)"
+              [attr.aria-pressed]="selectedLabels().includes(label.id)"
+              (click)="toggleLabel(label.id)"
+            >
+              {{ label.name }}
+            </button>
+          }
+        </div>
+      </fieldset>
+    </aside>
+  </div>
+
+  <footer class="dialog__footer detail__footer">
+    <button type="button" class="btn btn--danger detail__delete" (click)="remove()">
+      <app-icon name="trash" [size]="16" />
+      Excluir cartão
+    </button>
+    <button type="button" class="btn btn--ghost" (click)="ref.close()">Cancelar</button>
+    <button type="submit" class="btn btn--primary">Salvar</button>
+  </footer>
+</form>

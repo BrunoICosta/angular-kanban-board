@@ -119,6 +119,34 @@ export class BoardDetailEffects {
     ),
   );
 
+  readonly updateCard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardPageActions.updateCard),
+      concatMap(({ card, previous }) =>
+        this.cardsApi.update(card).pipe(
+          map((saved) => BoardApiActions.updateCardSuccess({ card: saved })),
+          catchError((error: unknown) =>
+            of(BoardApiActions.updateCardFailure({ previous, error: toErrorMessage(error) })),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  readonly deleteCard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardPageActions.deleteCard),
+      mergeMap(({ card }) =>
+        this.cardsApi.delete(card.id).pipe(
+          map(() => BoardApiActions.deleteCardSuccess({ card })),
+          catchError((error: unknown) =>
+            of(BoardApiActions.deleteCardFailure({ card, error: toErrorMessage(error) })),
+          ),
+        ),
+      ),
+    ),
+  );
+
   /**
    * Moves are persisted in order (`concatMap`) so the server sees them in the same sequence
    * the user made them. On failure the reducer restores the cards' previous positions.
@@ -148,6 +176,8 @@ export class BoardDetailEffects {
           BoardApiActions.moveColumnFailure,
           BoardApiActions.addCardFailure,
           BoardApiActions.moveCardFailure,
+          BoardApiActions.updateCardFailure,
+          BoardApiActions.deleteCardFailure,
         ),
         tap(({ error }) => this.notifications.error(`${error} A alteração foi desfeita.`)),
       ),

@@ -51,6 +51,7 @@
               [connectedTo]="cardListIds()"
               [canMoveLeft]="index > 0"
               [canMoveRight]="!last"
+              (openCard)="openCard($event)"
               (editColumn)="editColumn($event)"
               (deleteColumn)="deleteColumn($event)"
               (moveColumn)="shiftColumn(index, $event)"
