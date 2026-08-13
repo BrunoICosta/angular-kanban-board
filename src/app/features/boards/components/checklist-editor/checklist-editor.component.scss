@@ -1,0 +1,107 @@
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__count,
+  &__percent {
+    color: var(--text-subtle);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__add {
+    display: flex;
+    gap: 0.4rem;
+
+    .input {
+      min-height: 34px;
+      padding-block: 0.3rem;
+    }
+  }
+}
+
+.progress {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+
+  &__bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--accent);
+    transition: width 240ms ease;
+  }
+
+  &--complete &__bar {
+    background: var(--success);
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: var(--radius-sm);
+
+  &:hover {
+    background: var(--surface-2);
+  }
+
+  &__label {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    gap: 0.55rem;
+    min-width: 0;
+    font-size: 0.9rem;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+
+    input {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+  }
+
+  &--done &__label span {
+    color: var(--text-subtle);
+    text-decoration: line-through;
+  }
+
+  &__remove {
+    opacity: 0;
+  }
+
+  &:hover &__remove,
+  &__remove:focus-visible {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    &__remove {
+      opacity: 1;
+    }
+  }
+}

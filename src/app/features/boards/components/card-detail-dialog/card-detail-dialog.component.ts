@@ -1,13 +1,14 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AvatarComponent } from '../../../../shared/ui/avatar/avatar.component';
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
-import { Card, LABELS, LabelId } from '../../models/card.model';
+import { Card, ChecklistItem, LABELS, LabelId } from '../../models/card.model';
 import { Column } from '../../models/column.model';
+import { ChecklistEditorComponent } from '../checklist-editor/checklist-editor.component';
 
 export interface CardDetailDialogData {
   card: Card;
@@ -21,7 +22,13 @@ export const CARD_DESCRIPTION_MAX_LENGTH = 2000;
 
 @Component({
   selector: 'app-card-detail-dialog',
-  imports: [ReactiveFormsModule, DatePipe, IconComponent, AvatarComponent],
+  imports: [
+    ReactiveFormsModule,
+    DatePipe,
+    IconComponent,
+    AvatarComponent,
+    ChecklistEditorComponent,
+  ],
   templateUrl: './card-detail-dialog.component.html',
   styleUrl: './card-detail-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +54,7 @@ export class CardDetailDialogComponent {
     labels: [[...this.data.card.labels] as LabelId[]],
   });
 
+  protected readonly checklist = signal<ChecklistItem[]>(this.data.card.checklist);
   protected readonly assignee = toSignal(this.form.controls.assignee.valueChanges, {
     initialValue: this.form.controls.assignee.value,
   });
@@ -82,6 +90,7 @@ export class CardDetailDialogComponent {
         assignee: value.assignee.trim() || null,
         dueDate: value.dueDate || null,
         labels,
+        checklist: this.checklist(),
       },
     });
   }

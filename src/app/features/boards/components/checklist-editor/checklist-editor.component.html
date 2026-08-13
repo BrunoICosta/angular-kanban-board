@@ -1,0 +1,60 @@
+<section class="checklist" aria-labelledby="checklist-title">
+  <header class="checklist__header">
+    <h3 id="checklist-title" class="field__label">Checklist</h3>
+    @if (progress().total) {
+      <span class="checklist__count">{{ progress().done }}/{{ progress().total }}</span>
+    }
+  </header>
+
+  @if (progress().total) {
+    <div
+      class="progress"
+      role="progressbar"
+      aria-label="Progresso da checklist"
+      [attr.aria-valuenow]="progress().percent"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [class.progress--complete]="progress().complete"
+    >
+      <span class="progress__bar" [style.width.%]="progress().percent"></span>
+    </div>
+    <span class="checklist__percent">{{ progress().percent }}% concluído</span>
+  }
+
+  <ul class="checklist__items">
+    @for (item of items(); track item.id) {
+      <li class="item" [class.item--done]="item.done">
+        <label class="item__label">
+          <input type="checkbox" [checked]="item.done" (change)="toggle(item.id)" />
+          <span>{{ item.text }}</span>
+        </label>
+        <button
+          type="button"
+          class="icon-btn icon-btn--sm item__remove"
+          [attr.aria-label]="'Remover item ' + item.text"
+          (click)="remove(item.id)"
+        >
+          <app-icon name="x" [size]="14" />
+        </button>
+      </li>
+    }
+  </ul>
+
+  <!-- Not a <form>: this editor lives inside the card dialog form (forms cannot be nested). -->
+  <div class="checklist__add">
+    <label class="sr-only" for="checklist-new">Novo item da checklist</label>
+    <input
+      id="checklist-new"
+      class="input"
+      [formControl]="text"
+      (keydown.enter)="$event.preventDefault(); add()"
+      placeholder="Adicionar item…"
+      autocomplete="off"
+      [attr.maxlength]="maxLength"
+    />
+    <button type="button" class="btn btn--sm" [disabled]="!text.value.trim()" (click)="add()">
+      <app-icon name="plus" [size]="14" />
+      Adicionar
+    </button>
+  </div>
+</section>
