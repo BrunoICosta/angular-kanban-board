@@ -15,7 +15,7 @@ import { NotificationService } from './notification.service';
           [class.toast--success]="toast.kind === 'success'"
           [attr.role]="toast.kind === 'error' ? 'alert' : 'status'"
         >
-          <app-icon [name]="toast.kind === 'error' ? 'alert' : 'check'" [size]="16" />
+          <app-icon [name]="toast.kind === 'success' ? 'check' : 'alert'" [size]="16" />
           <span class="toast__message">{{ toast.message }}</span>
           <button
             type="button"

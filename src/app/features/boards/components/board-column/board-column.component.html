@@ -1,10 +1,27 @@
-<section class="column" [attr.aria-labelledby]="'column-title-' + column().id">
+<section
+  class="column"
+  [class.column--at-limit]="wip() === 'at-limit'"
+  [class.column--over]="wip() === 'over'"
+  [attr.aria-labelledby]="'column-title-' + column().id"
+>
   <header class="column__header" cdkDragHandle>
     <app-icon class="column__grip" name="grip" [size]="14" />
     <h2 class="column__title" [id]="'column-title-' + column().id">{{ column().title }}</h2>
     <span class="column__count" [attr.aria-label]="countLabel() + ' cartões'">
       {{ countLabel() }}
     </span>
+    @if (column().wipLimit; as limit) {
+      <span
+        class="wip"
+        [class.wip--at-limit]="wip() === 'at-limit'"
+        [class.wip--over]="wip() === 'over'"
+        [attr.title]="'Limite de WIP: ' + limit"
+      >
+        <app-icon name="gauge" [size]="12" />
+        <span class="sr-only">Limite de WIP</span>
+        {{ limit }}
+      </span>
+    }
     <button
       type="button"
       class="icon-btn icon-btn--sm"
@@ -14,6 +31,14 @@
       <app-icon name="more" [size]="16" />
     </button>
   </header>
+
+  @if (wip() === 'over') {
+    <p class="column__warning" role="status">
+      <app-icon name="alert" [size]="14" />
+      Limite de WIP excedido ({{ totalCount() ?? cards().length }}/{{ column().wipLimit }}). Termine
+      algo antes de puxar mais trabalho.
+    </p>
+  }
 
   <ul
     class="column__cards"

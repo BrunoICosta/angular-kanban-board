@@ -15,6 +15,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, from, switchMap } from 'rxjs';
 
+import { NotificationService } from '../../../../core/notifications/notification.service';
 import { ConfirmDialogService } from '../../../../shared/ui/confirm-dialog/confirm-dialog.service';
 import { dialogConfig } from '../../../../shared/ui/dialog.config';
 import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-state.component';
@@ -48,6 +49,7 @@ import {
   selectVisibleCardsByColumn,
 } from '../../data-access/store/board-detail/board-detail.selectors';
 import { moveCard, reorderColumns } from '../../data-access/utils/reorder';
+import { wipStatus } from '../../data-access/utils/wip';
 import { boardColorValue } from '../../models/board.model';
 import { Card, LabelId } from '../../models/card.model';
 import { Column } from '../../models/column.model';
@@ -75,6 +77,7 @@ export class BoardPageComponent {
   private readonly store = inject(Store);
   private readonly dialog = inject(Dialog);
   private readonly confirmDialog = inject(ConfirmDialogService);
+  private readonly notifications = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Route param `:id` (bound through `withComponentInputBinding`). */
@@ -232,9 +235,22 @@ export class BoardPageComponent {
   }
 
   protected dropCard({ cardId, toColumnId, toIndex }: CardDropEvent): void {
-    const { moved, previous } = moveCard(this.cardsByColumn(), cardId, toColumnId, toIndex);
-    if (moved.length) {
-      this.store.dispatch(BoardPageActions.moveCard({ moved, previous }));
+    const cardsByColumn = this.cardsByColumn();
+    const { moved, previous } = moveCard(cardsByColumn, cardId, toColumnId, toIndex);
+    if (!moved.length) {
+      return;
+    }
+    this.store.dispatch(BoardPageActions.moveCard({ moved, previous }));
+
+    const target = this.columns().find((column) => column.id === toColumnId);
+    const cameFromAnotherColumn = previous.some(
+      (card) => card.id === cardId && card.columnId !== toColumnId,
+    );
+    const countAfter = (cardsByColumn[toColumnId]?.length ?? 0) + 1;
+    if (target && cameFromAnotherColumn && wipStatus(countAfter, target.wipLimit) === 'over') {
+      this.notifications.info(
+        `"${target.title}" passou do limite de WIP (${countAfter}/${target.wipLimit}).`,
+      );
     }
   }
 

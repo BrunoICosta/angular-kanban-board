@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { InlineAddFormComponent } from '../../../../shared/ui/inline-add-form/inline-add-form.component';
+import { wipStatus } from '../../data-access/utils/wip';
 import { Card } from '../../models/card.model';
 import { Column } from '../../models/column.model';
 import { CardItemComponent } from '../card-item/card-item.component';
@@ -66,6 +67,10 @@ export class BoardColumnComponent {
     const visible = this.cards().length;
     return visible === total ? `${total}` : `${visible}/${total}`;
   });
+  /** WIP is computed from every card in the column, not only the ones visible in a filter. */
+  protected readonly wip = computed(() =>
+    wipStatus(this.totalCount() ?? this.cards().length, this.column().wipLimit),
+  );
   protected readonly listId = computed(() => CARD_LIST_ID_PREFIX + this.column().id);
   /** Short press-and-hold on touch screens so a swipe still scrolls the board. */
   protected readonly dragStartDelay = { touch: 180, mouse: 0 };
