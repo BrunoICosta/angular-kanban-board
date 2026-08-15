@@ -31,6 +31,15 @@
     }
   }
 
+  &__toolbar {
+    display: block;
+    padding: 0 1rem 0.85rem;
+
+    @media (min-width: 768px) {
+      padding: 0 1.5rem 1rem;
+    }
+  }
+
   &__dot {
     flex-shrink: 0;
     width: 12px;

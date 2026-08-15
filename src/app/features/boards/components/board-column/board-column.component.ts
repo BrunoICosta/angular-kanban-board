@@ -49,6 +49,10 @@ export class BoardColumnComponent {
   /** Whether the column can move left/right (keyboard-friendly alternative to dragging). */
   readonly canMoveLeft = input(false);
   readonly canMoveRight = input(false);
+  /** Total cards in the column; differs from `cards().length` while a filter is active. */
+  readonly totalCount = input<number | null>(null);
+  /** Dragging is turned off while filtering (indexes of a filtered list are ambiguous). */
+  readonly dragDisabled = input(false);
 
   readonly openCard = output<Card>();
   readonly editColumn = output<Column>();
@@ -57,6 +61,11 @@ export class BoardColumnComponent {
   readonly cardDropped = output<CardDropEvent>();
   readonly moveColumn = output<-1 | 1>();
 
+  protected readonly countLabel = computed(() => {
+    const total = this.totalCount() ?? this.cards().length;
+    const visible = this.cards().length;
+    return visible === total ? `${total}` : `${visible}/${total}`;
+  });
   protected readonly listId = computed(() => CARD_LIST_ID_PREFIX + this.column().id);
   /** Short press-and-hold on touch screens so a swipe still scrolls the board. */
   protected readonly dragStartDelay = { touch: 180, mouse: 0 };

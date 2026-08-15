@@ -1,5 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 
+import { CardFilter, EMPTY_FILTER } from '../../../models/card-filter.model';
 import { LoadStatus } from '../load-status.model';
 import { BoardApiActions, BoardPageActions } from './board-detail.actions';
 
@@ -10,6 +11,7 @@ export interface BoardDetailState {
   error: string | null;
   /** Number of optimistic writes still waiting for the server (drives the "saving" badge). */
   pendingSaves: number;
+  filter: CardFilter;
 }
 
 export const initialBoardDetailState: BoardDetailState = {
@@ -17,6 +19,7 @@ export const initialBoardDetailState: BoardDetailState = {
   status: 'idle',
   error: null,
   pendingSaves: 0,
+  filter: EMPTY_FILTER,
 };
 
 /** Optimistic writes started by the user... */
@@ -60,6 +63,22 @@ export const boardDetailFeature = createFeature({
       boardId,
       status: 'loading',
       error: null,
+      // Filters belong to a board visit; opening another board starts clean.
+      filter: state.boardId === boardId ? state.filter : EMPTY_FILTER,
+    })),
+    on(BoardPageActions.searchChanged, (state, { query }): BoardDetailState => ({
+      ...state,
+      filter: { ...state.filter, query },
+    })),
+    on(BoardPageActions.labelFilterToggled, (state, { label }): BoardDetailState => {
+      const labels = state.filter.labels.includes(label)
+        ? state.filter.labels.filter((id) => id !== label)
+        : [...state.filter.labels, label];
+      return { ...state, filter: { ...state.filter, labels } };
+    }),
+    on(BoardPageActions.filtersCleared, (state): BoardDetailState => ({
+      ...state,
+      filter: EMPTY_FILTER,
     })),
     on(BoardApiActions.loadBoardSuccess, (state): BoardDetailState => ({
       ...state,

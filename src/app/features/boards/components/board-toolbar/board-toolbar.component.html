@@ -1,0 +1,39 @@
+<div class="toolbar" role="search" aria-label="Filtrar cartões">
+  <div class="search">
+    <app-icon class="search__icon" name="search" [size]="16" />
+    <label class="sr-only" for="board-search">Buscar cartões</label>
+    <input
+      id="board-search"
+      class="input search__input"
+      type="search"
+      placeholder="Buscar cartões…"
+      autocomplete="off"
+      [formControl]="search"
+    />
+  </div>
+
+  <div class="labels" role="group" aria-label="Filtrar por etiqueta">
+    @for (label of labels; track label.id) {
+      <button
+        type="button"
+        class="chip"
+        [style.--label-color]="label.color"
+        [class.chip--active]="filter().labels.includes(label.id)"
+        [attr.aria-pressed]="filter().labels.includes(label.id)"
+        (click)="labelToggled.emit(label.id)"
+      >
+        {{ label.name }}
+      </button>
+    }
+  </div>
+
+  @if (active()) {
+    <p class="summary" role="status">
+      {{ summary().visible }} de {{ summary().total }} cartões
+      <button type="button" class="btn btn--ghost btn--sm" (click)="clear()">
+        <app-icon name="x" [size]="14" />
+        Limpar filtros
+      </button>
+    </p>
+  }
+</div>

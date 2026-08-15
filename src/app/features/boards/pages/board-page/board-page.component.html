@@ -7,6 +7,18 @@
     <h1 class="board__title">{{ board()?.title ?? 'Carregando…' }}</h1>
   </header>
 
+  @if (status() === 'loaded' && columns().length > 0) {
+    <app-board-toolbar
+      class="board__toolbar"
+      [filter]="filter()"
+      [summary]="filterSummary()"
+      [active]="isFiltering()"
+      (searchChanged)="search($event)"
+      (labelToggled)="toggleLabel($event)"
+      (cleared)="clearFilters()"
+    />
+  }
+
   @switch (status()) {
     @case ('error') {
       <app-empty-state
@@ -47,7 +59,9 @@
               [cdkDragData]="column.id"
               [cdkDragStartDelay]="dragStartDelay"
               [column]="column"
-              [cards]="cardsByColumn()[column.id] ?? []"
+              [cards]="visibleCardsByColumn()[column.id] ?? []"
+              [totalCount]="cardsByColumn()[column.id]?.length ?? 0"
+              [dragDisabled]="isFiltering()"
               [connectedTo]="cardListIds()"
               [canMoveLeft]="index > 0"
               [canMoveRight]="!last"

@@ -1,7 +1,7 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { Board } from '../../../models/board.model';
-import { Card } from '../../../models/card.model';
+import { Card, LabelId } from '../../../models/card.model';
 import { Column } from '../../../models/column.model';
 
 /** Events triggered by the user on the board page (`/boards/:id`). */
@@ -19,6 +19,9 @@ export const BoardPageActions = createActionGroup({
     'Add Card': props<{ card: Card }>(),
     'Update Card': props<{ card: Card; previous: Card }>(),
     'Delete Card': props<{ card: Card }>(),
+    'Search Changed': props<{ query: string }>(),
+    'Label Filter Toggled': props<{ label: LabelId }>(),
+    'Filters Cleared': emptyProps(),
     /** Drag & drop result: cards with their new column/position and their previous values. */
     'Move Card': props<{ moved: Card[]; previous: Card[] }>(),
   },

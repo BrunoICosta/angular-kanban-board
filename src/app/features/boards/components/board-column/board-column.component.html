@@ -2,8 +2,8 @@
   <header class="column__header" cdkDragHandle>
     <app-icon class="column__grip" name="grip" [size]="14" />
     <h2 class="column__title" [id]="'column-title-' + column().id">{{ column().title }}</h2>
-    <span class="column__count" [attr.aria-label]="cards().length + ' cartões'">
-      {{ cards().length }}
+    <span class="column__count" [attr.aria-label]="countLabel() + ' cartões'">
+      {{ countLabel() }}
     </span>
     <button
       type="button"
@@ -22,6 +22,7 @@
     [id]="listId()"
     [cdkDropListData]="cards()"
     [cdkDropListConnectedTo]="connectedTo()"
+    [cdkDropListDisabled]="dragDisabled()"
     (cdkDropListDropped)="onDrop($event)"
   >
     @for (card of cards(); track card.id) {
@@ -30,7 +31,9 @@
         <div class="card-placeholder" *cdkDragPlaceholder></div>
       </li>
     } @empty {
-      <li class="column__empty">Arraste um cartão para cá</li>
+      <li class="column__empty">
+        {{ dragDisabled() ? 'Nenhum cartão corresponde ao filtro' : 'Arraste um cartão para cá' }}
+      </li>
     }
   </ul>
 

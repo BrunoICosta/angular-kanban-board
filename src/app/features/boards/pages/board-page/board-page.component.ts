@@ -21,6 +21,7 @@ import { EmptyStateComponent } from '../../../../shared/ui/empty-state/empty-sta
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { createId } from '../../../../shared/utils/id';
 import { AddColumnComponent } from '../../components/add-column/add-column.component';
+import { BoardToolbarComponent } from '../../components/board-toolbar/board-toolbar.component';
 import {
   BoardColumnComponent,
   CARD_LIST_ID_PREFIX,
@@ -41,10 +42,14 @@ import {
   selectBoardStatus,
   selectCardsByColumn,
   selectCurrentBoard,
+  selectFilter,
+  selectFilterSummary,
+  selectIsFiltering,
+  selectVisibleCardsByColumn,
 } from '../../data-access/store/board-detail/board-detail.selectors';
 import { moveCard, reorderColumns } from '../../data-access/utils/reorder';
 import { boardColorValue } from '../../models/board.model';
-import { Card } from '../../models/card.model';
+import { Card, LabelId } from '../../models/card.model';
 import { Column } from '../../models/column.model';
 
 const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
@@ -57,6 +62,7 @@ const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
     EmptyStateComponent,
     BoardColumnComponent,
     AddColumnComponent,
+    BoardToolbarComponent,
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,
@@ -79,6 +85,10 @@ export class BoardPageComponent {
   protected readonly error = this.store.selectSignal(selectBoardError);
   protected readonly columns = this.store.selectSignal(selectBoardColumns);
   protected readonly cardsByColumn = this.store.selectSignal(selectCardsByColumn);
+  protected readonly visibleCardsByColumn = this.store.selectSignal(selectVisibleCardsByColumn);
+  protected readonly filter = this.store.selectSignal(selectFilter);
+  protected readonly filterSummary = this.store.selectSignal(selectFilterSummary);
+  protected readonly isFiltering = this.store.selectSignal(selectIsFiltering);
   protected readonly boardColor = computed(() => {
     const board = this.board();
     return board ? boardColorValue(board.color) : 'var(--accent)';
@@ -103,6 +113,18 @@ export class BoardPageComponent {
 
   protected reload(): void {
     this.load(this.id());
+  }
+
+  protected search(query: string): void {
+    this.store.dispatch(BoardPageActions.searchChanged({ query }));
+  }
+
+  protected toggleLabel(label: LabelId): void {
+    this.store.dispatch(BoardPageActions.labelFilterToggled({ label }));
+  }
+
+  protected clearFilters(): void {
+    this.store.dispatch(BoardPageActions.filtersCleared());
   }
 
   protected addColumn(title: string): void {

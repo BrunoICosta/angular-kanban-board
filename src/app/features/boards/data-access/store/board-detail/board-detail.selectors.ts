@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 
 import { Card } from '../../../models/card.model';
+import { isFilterActive, matchesFilter } from '../../utils/card-filter';
 import { selectBoardEntities } from '../boards/boards.reducer';
 import { boardDetailFeature } from './board-detail.reducer';
 import { cardsFeature } from './cards.reducer';
@@ -10,7 +11,11 @@ export const {
   selectBoardId: selectCurrentBoardId,
   selectStatus: selectBoardStatus,
   selectError: selectBoardError,
+  selectPendingSaves,
+  selectFilter,
 } = boardDetailFeature;
+
+export const selectIsFiltering = createSelector(selectFilter, isFilterActive);
 
 export const selectCurrentBoard = createSelector(
   selectBoardEntities,
@@ -39,5 +44,32 @@ export const selectCardsByColumn = createSelector(
       grouped[card.columnId]?.push(card);
     }
     return grouped;
+  },
+);
+
+/** Same shape as `selectCardsByColumn`, keeping only cards that match the active filter. */
+export const selectVisibleCardsByColumn = createSelector(
+  selectCardsByColumn,
+  selectFilter,
+  (cardsByColumn, filter): CardsByColumn => {
+    if (!isFilterActive(filter)) {
+      return cardsByColumn;
+    }
+    return Object.fromEntries(
+      Object.entries(cardsByColumn).map(([columnId, cards]) => [
+        columnId,
+        cards?.filter((card) => matchesFilter(card, filter)),
+      ]),
+    );
+  },
+);
+
+export const selectFilterSummary = createSelector(
+  selectCardsByColumn,
+  selectVisibleCardsByColumn,
+  (all, visible) => {
+    const count = (byColumn: CardsByColumn) =>
+      Object.values(byColumn).reduce((total, cards) => total + (cards?.length ?? 0), 0);
+    return { total: count(all), visible: count(visible) };
   },
 );
