@@ -45,6 +45,7 @@ import {
   selectCurrentBoard,
   selectFilter,
   selectFilterSummary,
+  selectPendingSaves,
   selectIsFiltering,
   selectVisibleCardsByColumn,
 } from '../../data-access/store/board-detail/board-detail.selectors';
@@ -92,6 +93,8 @@ export class BoardPageComponent {
   protected readonly filter = this.store.selectSignal(selectFilter);
   protected readonly filterSummary = this.store.selectSignal(selectFilterSummary);
   protected readonly isFiltering = this.store.selectSignal(selectIsFiltering);
+  protected readonly isSaving = computed(() => this.pendingSaves() > 0);
+  private readonly pendingSaves = this.store.selectSignal(selectPendingSaves);
   protected readonly boardColor = computed(() => {
     const board = this.board();
     return board ? boardColorValue(board.color) : 'var(--accent)';

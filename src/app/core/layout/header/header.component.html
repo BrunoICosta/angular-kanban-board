@@ -16,6 +16,13 @@
       <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" />
     </button>
 
+    @if (demo.simulateFailures()) {
+      <span class="failure-badge" role="status">
+        <app-icon name="zap" [size]="14" />
+        Falhas simuladas
+      </span>
+    }
+
     @if (user(); as user) {
       <button
         type="button"
@@ -32,6 +39,32 @@
             <strong>{{ user.name }}</strong>
             <span>{{ user.email }}</span>
           </div>
+          <div class="menu__separator" role="separator"></div>
+          <span class="menu__caption">Demonstração</span>
+          <button
+            type="button"
+            class="menu__item"
+            cdkMenuItemCheckbox
+            [cdkMenuItemChecked]="demo.simulateFailures()"
+            (cdkMenuItemTriggered)="demo.toggleSimulateFailures()"
+          >
+            <app-icon name="zap" [size]="16" />
+            Simular falhas do servidor
+            <span class="menu__check" aria-hidden="true">
+              @if (demo.simulateFailures()) {
+                <app-icon name="check" [size]="14" />
+              }
+            </span>
+          </button>
+          <button
+            type="button"
+            class="menu__item"
+            cdkMenuItem
+            (cdkMenuItemTriggered)="restoreSampleData()"
+          >
+            <app-icon name="refresh" [size]="16" />
+            Restaurar dados de exemplo
+          </button>
           <div class="menu__separator" role="separator"></div>
           <button type="button" class="menu__item" cdkMenuItem (cdkMenuItemTriggered)="logout()">
             <app-icon name="logout" [size]="16" />

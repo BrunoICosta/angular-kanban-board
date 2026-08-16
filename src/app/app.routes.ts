@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, guestGuard } from './core/auth/auth.guard';
-import { ShellComponent } from './core/layout/shell/shell.component';
 
 export const routes: Routes = [
   {
@@ -11,7 +10,9 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: ShellComponent,
+    // The authenticated shell (header, menus, toasts) is lazy too: the login page never needs it.
+    loadComponent: () =>
+      import('./core/layout/shell/shell.component').then((m) => m.ShellComponent),
     canActivate: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'boards' },

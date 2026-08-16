@@ -5,6 +5,17 @@
     </a>
     <span class="board__dot" aria-hidden="true"></span>
     <h1 class="board__title">{{ board()?.title ?? 'Carregando…' }}</h1>
+    @if (status() === 'loaded') {
+      <span class="save-status" [class.save-status--saving]="isSaving()" aria-live="polite">
+        @if (isSaving()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Salvando…
+        } @else {
+          <app-icon name="check" [size]="14" />
+          Salvo
+        }
+      </span>
+    }
   </header>
 
   @if (status() === 'loaded' && columns().length > 0) {

@@ -83,3 +83,19 @@
     filter: brightness(1.1);
   }
 }
+
+.failure-badge {
+  display: none;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  @media (min-width: 560px) {
+    display: inline-flex;
+  }
+}
