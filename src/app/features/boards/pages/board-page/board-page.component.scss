@@ -150,3 +150,19 @@
     color: var(--accent-strong);
   }
 }
+
+@media (max-width: 480px) {
+  .board__title {
+    font-size: 1.05rem;
+  }
+
+  .save-status {
+    font-size: 0;
+    gap: 0;
+
+    app-icon,
+    .spinner {
+      font-size: initial;
+    }
+  }
+}

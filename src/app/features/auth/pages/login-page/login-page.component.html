@@ -1,14 +1,14 @@
 <div class="login">
-  <section class="login__hero" aria-hidden="true">
+  <section class="login__hero">
     <div class="hero">
       <p class="hero__eyebrow">Fluxo</p>
-      <h2 class="hero__title">Organize o trabalho do time em um só quadro.</h2>
+      <p class="hero__title">Organize o trabalho do time em um só quadro.</p>
       <p class="hero__text">
         Arraste cartões entre colunas, defina limites de WIP e acompanhe checklists — tudo salvo
         automaticamente.
       </p>
 
-      <div class="preview">
+      <div class="preview" aria-hidden="true">
         @for (column of previewColumns; track $index) {
           <div class="preview__column">
             <span class="preview__title"></span>

@@ -67,7 +67,8 @@
   --radius-lg: 14px;
   --radius-full: 999px;
   --header-height: 60px;
-  --column-width: 300px;
+  /* On phones a column takes most of the screen and the next one peeks in from the right. */
+  --column-width: min(300px, calc(100vw - 3.5rem));
   --focus-ring: 0 0 0 3px var(--accent-soft), 0 0 0 1px var(--accent);
   --transition: 160ms cubic-bezier(0.2, 0, 0, 1);
 }

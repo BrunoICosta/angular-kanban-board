@@ -11,6 +11,7 @@
     <script>
       // Apply the persisted theme before the first paint to avoid a flash of the wrong theme.
       (function () {
+        // Dark is the default theme; the toggle in the header persists the choice.
         var theme = 'dark';
         try {
           var stored = localStorage.getItem('kanban.theme');
