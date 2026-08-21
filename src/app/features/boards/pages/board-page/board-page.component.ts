@@ -11,6 +11,7 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, from, switchMap } from 'rxjs';
@@ -79,6 +80,7 @@ export class BoardPageComponent {
   private readonly dialog = inject(Dialog);
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly notifications = inject(NotificationService);
+  private readonly title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Route param `:id` (bound through `withComponentInputBinding`). */
@@ -114,6 +116,14 @@ export class BoardPageComponent {
     effect(() => {
       const boardId = this.id();
       untracked(() => this.load(boardId));
+    });
+
+    // The route title is generic ("Quadro"); once the board is known, show its name instead.
+    effect(() => {
+      const board = this.board();
+      if (board) {
+        this.title.setTitle(`${board.title} · Fluxo`);
+      }
     });
   }
 
