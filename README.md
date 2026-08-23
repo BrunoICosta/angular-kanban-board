@@ -11,6 +11,8 @@ inteiro no GitHub Pages e pode trocar para uma API real sem mexer nos componente
 (entre com qualquer e-mail e uma senha com 6+ caracteres — ou clique em "Preencher com conta de
 demonstração").
 
+![Quadro Kanban do Fluxo no tema escuro](docs/screenshot.png)
+
 ## Funcionalidades
 
 - **Autenticação simulada**: login com qualquer e-mail + senha de no mínimo 6 caracteres; a "API"
