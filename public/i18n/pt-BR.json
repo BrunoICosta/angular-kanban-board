@@ -1,0 +1,54 @@
+{
+  "app": {
+    "skipLink": "Pular para o conteúdo"
+  },
+  "titles": {
+    "login": "Entrar",
+    "boards": "Meus quadros",
+    "board": "Quadro"
+  },
+  "language": {
+    "label": "Idioma",
+    "names": {
+      "pt-BR": "Português (Brasil)",
+      "en": "English"
+    }
+  },
+  "header": {
+    "home": "Fluxo — ir para meus quadros",
+    "themeToLight": "Ativar tema claro",
+    "themeToDark": "Ativar tema escuro",
+    "userMenu": "Menu de {{name}}",
+    "demo": "Demonstração",
+    "simulateFailures": "Simular falhas do servidor",
+    "failuresBadge": "Falhas simuladas",
+    "restoreSample": "Restaurar dados de exemplo",
+    "restoreTitle": "Restaurar dados de exemplo?",
+    "restoreMessage": "Todos os quadros, colunas e cartões voltarão ao estado inicial da demonstração.",
+    "restoreConfirm": "Restaurar",
+    "logout": "Sair"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "add": "Adicionar",
+    "retry": "Tentar novamente",
+    "loading": "Carregando…",
+    "unassigned": "Sem responsável"
+  },
+  "toast": {
+    "close": "Fechar notificação",
+    "rolledBack": "{{error}} A alteração foi desfeita."
+  },
+  "errors": {
+    "offline": "Sem conexão com o servidor.",
+    "unauthorized": "Sua sessão expirou.",
+    "invalidCredentials": "E-mail inválido ou senha com menos de 6 caracteres.",
+    "notFound": "O item não foi encontrado.",
+    "boardNotFound": "Este quadro não existe ou foi excluído.",
+    "unavailable": "O servidor está indisponível no momento.",
+    "generic": "Algo deu errado. Tente novamente."
+  }
+}

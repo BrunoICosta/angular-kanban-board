@@ -11,11 +11,11 @@ import {
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, from, switchMap } from 'rxjs';
 
+import { TranslatedTitleStrategy } from '../../../../core/i18n/translated-title.strategy';
 import { NotificationService } from '../../../../core/notifications/notification.service';
 import { ConfirmDialogService } from '../../../../shared/ui/confirm-dialog/confirm-dialog.service';
 import { dialogConfig } from '../../../../shared/ui/dialog.config';
@@ -80,7 +80,7 @@ export class BoardPageComponent {
   private readonly dialog = inject(Dialog);
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly notifications = inject(NotificationService);
-  private readonly title = inject(Title);
+  private readonly titleStrategy = inject(TranslatedTitleStrategy);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Route param `:id` (bound through `withComponentInputBinding`). */
@@ -122,7 +122,7 @@ export class BoardPageComponent {
     effect(() => {
       const board = this.board();
       if (board) {
-        this.title.setTitle(`${board.title} · Fluxo`);
+        this.titleStrategy.setPageTitle(board.title);
       }
     });
   }

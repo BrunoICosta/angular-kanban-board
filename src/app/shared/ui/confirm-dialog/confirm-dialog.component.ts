@@ -1,5 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../icon/icon.component';
 
@@ -12,18 +13,25 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [IconComponent],
+  imports: [IconComponent, TranslocoPipe],
   template: `
     <div class="dialog dialog--sm">
       <header class="dialog__header">
         <h2 class="dialog__title" id="confirm-title">{{ data.title }}</h2>
-        <button type="button" class="icon-btn" aria-label="Fechar" (click)="ref.close(false)">
+        <button
+          type="button"
+          class="icon-btn"
+          [attr.aria-label]="'common.close' | transloco"
+          (click)="ref.close(false)"
+        >
           <app-icon name="x" />
         </button>
       </header>
       <p class="dialog__body" id="confirm-message">{{ data.message }}</p>
       <footer class="dialog__footer">
-        <button type="button" class="btn btn--ghost" (click)="ref.close(false)">Cancelar</button>
+        <button type="button" class="btn btn--ghost" (click)="ref.close(false)">
+          {{ 'common.cancel' | transloco }}
+        </button>
         <button
           type="button"
           class="btn"
@@ -32,7 +40,7 @@ export interface ConfirmDialogData {
           (click)="ref.close(true)"
           cdkFocusInitial
         >
-          {{ data.confirmLabel ?? 'Confirmar' }}
+          {{ data.confirmLabel ?? ('common.confirm' | transloco) }}
         </button>
       </footer>
     </div>

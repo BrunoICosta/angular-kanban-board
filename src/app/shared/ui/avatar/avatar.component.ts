@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoService } from '@jsverse/transloco';
 
 import { hueFromName, initials } from '../../utils/initials';
 
@@ -24,7 +26,7 @@ import { hueFromName, initials } from '../../utils/initials';
   `,
   host: {
     role: 'img',
-    '[attr.aria-label]': 'name() || "Sem responsável"',
+    '[attr.aria-label]': 'name() || unassignedLabel()',
     '[attr.title]': 'name()',
     '[style.--avatar-size.px]': 'size()',
     '[style.--avatar-hue]': 'hue()',
@@ -35,6 +37,10 @@ export class AvatarComponent {
   readonly name = input<string | null>(null);
   readonly size = input(28);
 
+  protected readonly unassignedLabel = toSignal(
+    inject(TranslocoService).selectTranslate<string>('common.unassigned'),
+    { initialValue: '' },
+  );
   protected readonly initials = computed(() => initials(this.name()));
   protected readonly hue = computed(() => hueFromName(this.name()));
 }

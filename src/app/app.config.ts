@@ -19,6 +19,7 @@ import { authInterceptor } from './core/auth/auth.interceptor';
 import { loadSession } from './core/auth/session-storage';
 import { AuthEffects } from './core/auth/store/auth.effects';
 import { authFeature, authStateFromSession } from './core/auth/store/auth.reducer';
+import { provideI18n } from './core/i18n/provide-i18n';
 import { AppState } from './core/store/app.state';
 import { mockApiErrorInterceptor } from './mock-api/mock-api-error.interceptor';
 import { provideMockApi } from './mock-api/provide-mock-api';
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     // The mock error normalizer must stay last (closest to the backend).
     provideHttpClient(withInterceptors([authInterceptor, mockApiErrorInterceptor])),
     provideMockApi(),
+    provideI18n(),
     provideStore<AppState>(
       { auth: authFeature.reducer, router: routerReducer },
       {

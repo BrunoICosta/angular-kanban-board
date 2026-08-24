@@ -1,16 +1,18 @@
 <header class="header">
-  <a class="brand" routerLink="/boards" aria-label="Fluxo — ir para meus quadros">
+  <a class="brand" routerLink="/boards" [attr.aria-label]="'header.home' | transloco">
     <span class="brand__logo" aria-hidden="true"><span></span><span></span><span></span></span>
     <span class="brand__name">Fluxo</span>
   </a>
 
   <div class="header__actions">
+    <app-language-switcher />
+
     <button
       type="button"
       class="icon-btn"
       (click)="themeService.toggle()"
       [attr.aria-label]="
-        themeService.theme() === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'
+        (themeService.theme() === 'dark' ? 'header.themeToLight' : 'header.themeToDark') | transloco
       "
     >
       <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" />
@@ -19,7 +21,7 @@
     @if (demo.simulateFailures()) {
       <span class="failure-badge" role="status">
         <app-icon name="zap" [size]="14" />
-        Falhas simuladas
+        {{ 'header.failuresBadge' | transloco }}
       </span>
     }
 
@@ -28,7 +30,7 @@
         type="button"
         class="user-btn"
         [cdkMenuTriggerFor]="userMenu"
-        [attr.aria-label]="'Menu de ' + user.name"
+        [attr.aria-label]="'header.userMenu' | transloco: { name: user.name }"
       >
         <app-avatar [name]="user.name" [size]="32" />
       </button>
@@ -40,7 +42,7 @@
             <span>{{ user.email }}</span>
           </div>
           <div class="menu__separator" role="separator"></div>
-          <span class="menu__caption">Demonstração</span>
+          <span class="menu__caption">{{ 'header.demo' | transloco }}</span>
           <button
             type="button"
             class="menu__item"
@@ -49,7 +51,7 @@
             (cdkMenuItemTriggered)="demo.toggleSimulateFailures()"
           >
             <app-icon name="zap" [size]="16" />
-            Simular falhas do servidor
+            {{ 'header.simulateFailures' | transloco }}
             <span class="menu__check" aria-hidden="true">
               @if (demo.simulateFailures()) {
                 <app-icon name="check" [size]="14" />
@@ -63,12 +65,12 @@
             (cdkMenuItemTriggered)="restoreSampleData()"
           >
             <app-icon name="refresh" [size]="16" />
-            Restaurar dados de exemplo
+            {{ 'header.restoreSample' | transloco }}
           </button>
           <div class="menu__separator" role="separator"></div>
           <button type="button" class="menu__item" cdkMenuItem (cdkMenuItemTriggered)="logout()">
             <app-icon name="logout" [size]="16" />
-            Sair
+            {{ 'header.logout' | transloco }}
           </button>
         </div>
       </ng-template>

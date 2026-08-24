@@ -11,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../icon/icon.component';
 
@@ -18,11 +19,11 @@ let nextId = 0;
 
 /**
  * "+ Add something" button that turns into a one-line form. Enter submits (and keeps the form
- * open for quick consecutive entries), Escape or "Cancelar" closes it.
+ * open for quick consecutive entries), Escape or "Cancel" closes it.
  */
 @Component({
   selector: 'app-inline-add-form',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, TranslocoPipe],
   template: `
     @if (editing()) {
       <form class="inline-add" [formGroup]="form" (ngSubmit)="submit()" (keydown.escape)="cancel()">
@@ -38,8 +39,12 @@ let nextId = 0;
           (keydown.enter)="onEnter($event)"
         ></textarea>
         <div class="inline-add__actions">
-          <button type="submit" class="btn btn--primary btn--sm">{{ submitLabel() }}</button>
-          <button type="button" class="btn btn--ghost btn--sm" (click)="cancel()">Cancelar</button>
+          <button type="submit" class="btn btn--primary btn--sm">
+            {{ submitLabel() ?? ('common.add' | transloco) }}
+          </button>
+          <button type="button" class="btn btn--ghost btn--sm" (click)="cancel()">
+            {{ 'common.cancel' | transloco }}
+          </button>
         </div>
       </form>
     } @else {
@@ -99,7 +104,7 @@ export class InlineAddFormComponent {
   readonly triggerLabel = input.required<string>();
   readonly inputLabel = input.required<string>();
   readonly placeholder = input('');
-  readonly submitLabel = input('Adicionar');
+  readonly submitLabel = input<string | null>(null);
   readonly maxLength = input(120);
   readonly submitted = output<string>();
 

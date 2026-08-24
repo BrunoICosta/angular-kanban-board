@@ -3,6 +3,7 @@ import localePt from '@angular/common/locales/pt';
 import { LOCALE_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideI18nTesting } from '../../../../../testing/i18n-testing';
 import { makeCard } from '../../testing/fixtures';
 import { CardItemComponent } from './card-item.component';
 
@@ -15,7 +16,7 @@ describe('CardItemComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CardItemComponent],
-      providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
+      providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }, provideI18nTesting()],
     });
     fixture = TestBed.createComponent(CardItemComponent);
     element = fixture.nativeElement as HTMLElement;

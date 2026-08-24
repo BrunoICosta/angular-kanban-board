@@ -1,6 +1,13 @@
 import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { InMemoryDbService, RequestInfo, ResponseOptions, STATUS } from 'angular-in-memory-web-api';
+import {
+  InMemoryDbService,
+  ParsedRequestUrl,
+  RequestInfo,
+  RequestInfoUtilities,
+  ResponseOptions,
+  STATUS,
+} from 'angular-in-memory-web-api';
 import { Observable } from 'rxjs';
 
 import { Credentials, LoginResponse, User } from '../core/auth/auth.model';
@@ -11,6 +18,9 @@ import { KanbanDb, createSeedDb } from './seed-data';
 
 type Row = Record<string, unknown> & { id: string };
 
+/** Collection name given to non-API URLs so they fall through to the real web server. */
+const PASS_THROUGH = '__pass-through__';
+
 /**
  * Fake REST backend used by the demo (GitHub Pages has no server).
  *
@@ -20,6 +30,7 @@ type Row = Record<string, unknown> & { id: string };
  * - `GET columns?boardId=`, `POST columns`, `PUT|DELETE columns/:id`
  * - `GET cards?boardId=`, `POST cards`, `PUT|DELETE cards/:id`
  *
+ * Any other URL (e.g. `i18n/en.json`) is passed through to the web server.
  * Every endpoint but login requires `Authorization: Bearer <token>`. Data is persisted to
  * localStorage so the demo survives page reloads.
  */
@@ -42,7 +53,17 @@ export class InMemoryDataService implements InMemoryDbService {
     return crypto.randomUUID();
   }
 
+  /** Only `api/...` belongs to the fake backend; static files are served by the real server. */
+  parseRequestUrl(url: string, utils: RequestInfoUtilities): ParsedRequestUrl {
+    const parsed = utils.parseRequestUrl(url);
+    const path = utils.getLocation(url).path.replace(/^\/+/, '');
+    return path.startsWith('api/') ? parsed : { ...parsed, collectionName: PASS_THROUGH };
+  }
+
   get(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    if (reqInfo.collectionName === PASS_THROUGH) {
+      return undefined;
+    }
     const unauthorized = this.checkAuth(reqInfo);
     if (unauthorized) {
       return unauthorized;
@@ -59,6 +80,9 @@ export class InMemoryDataService implements InMemoryDbService {
   }
 
   post(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    if (reqInfo.collectionName === PASS_THROUGH) {
+      return undefined;
+    }
     if (reqInfo.collectionName === 'auth' && reqInfo.id === 'login') {
       return this.login(reqInfo);
     }
@@ -66,10 +90,16 @@ export class InMemoryDataService implements InMemoryDbService {
   }
 
   put(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    if (reqInfo.collectionName === PASS_THROUGH) {
+      return undefined;
+    }
     return this.checkAuth(reqInfo) ?? this.maybeFail(reqInfo);
   }
 
   delete(reqInfo: RequestInfo): Observable<unknown> | undefined {
+    if (reqInfo.collectionName === PASS_THROUGH) {
+      return undefined;
+    }
     const rejected = this.checkAuth(reqInfo) ?? this.maybeFail(reqInfo);
     if (rejected) {
       return rejected;

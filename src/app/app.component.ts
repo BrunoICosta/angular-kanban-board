@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, TranslocoPipe],
   template: `
-    <a class="skip-link" href="#main">Pular para o conteúdo</a>
+    <a class="skip-link" href="#main">{{ 'app.skipLink' | transloco }}</a>
     <router-outlet />
   `,
   styles: `

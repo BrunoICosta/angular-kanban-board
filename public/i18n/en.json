@@ -1,0 +1,54 @@
+{
+  "app": {
+    "skipLink": "Skip to content"
+  },
+  "titles": {
+    "login": "Sign in",
+    "boards": "My boards",
+    "board": "Board"
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "pt-BR": "Português (Brasil)",
+      "en": "English"
+    }
+  },
+  "header": {
+    "home": "Fluxo — go to my boards",
+    "themeToLight": "Switch to light theme",
+    "themeToDark": "Switch to dark theme",
+    "userMenu": "{{name}}'s menu",
+    "demo": "Demo",
+    "simulateFailures": "Simulate server failures",
+    "failuresBadge": "Simulated failures",
+    "restoreSample": "Restore sample data",
+    "restoreTitle": "Restore sample data?",
+    "restoreMessage": "Every board, column and card will go back to the initial demo state.",
+    "restoreConfirm": "Restore",
+    "logout": "Sign out"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "save": "Save",
+    "add": "Add",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "unassigned": "Unassigned"
+  },
+  "toast": {
+    "close": "Dismiss notification",
+    "rolledBack": "{{error}} Your change was undone."
+  },
+  "errors": {
+    "offline": "Can't reach the server.",
+    "unauthorized": "Your session has expired.",
+    "invalidCredentials": "Invalid e-mail or password shorter than 6 characters.",
+    "notFound": "The item was not found.",
+    "boardNotFound": "This board doesn't exist or was deleted.",
+    "unavailable": "The server is unavailable right now.",
+    "generic": "Something went wrong. Please try again."
+  }
+}

@@ -13,6 +13,8 @@ export function provideMockApi(): EnvironmentProviders {
       // Relative URLs such as `api/boards` are resolved by the library against the host root
       // (it ignores <base href>), so the default rootPath works on GitHub Pages too.
       apiBase: 'api/',
+      // Non-API requests (translation files) go to the real web server.
+      passThruUnknownUrl: true,
       delay: 350,
       post204: false,
       put204: false,

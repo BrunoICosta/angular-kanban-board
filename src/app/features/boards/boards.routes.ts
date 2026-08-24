@@ -30,7 +30,7 @@ export const BOARDS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        title: 'Meus quadros · Fluxo',
+        title: 'titles.boards',
         loadComponent: () =>
           import('./pages/boards-list/boards-list-page.component').then(
             (m) => m.BoardsListPageComponent,
@@ -38,7 +38,7 @@ export const BOARDS_ROUTES: Routes = [
       },
       {
         path: ':id',
-        title: 'Quadro · Fluxo',
+        title: 'titles.board',
         loadComponent: () =>
           import('./pages/board-page/board-page.component').then((m) => m.BoardPageComponent),
       },

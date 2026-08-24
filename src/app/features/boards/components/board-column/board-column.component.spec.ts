@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideI18nTesting } from '../../../../../testing/i18n-testing';
 import { makeCard, makeColumn } from '../../testing/fixtures';
 import { BoardColumnComponent } from './board-column.component';
 
@@ -11,7 +12,10 @@ describe('BoardColumnComponent', () => {
     Array.from({ length: count }, (_, index) => makeCard({ id: `k${index}`, position: index }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [BoardColumnComponent] });
+    TestBed.configureTestingModule({
+      imports: [BoardColumnComponent],
+      providers: [provideI18nTesting()],
+    });
     fixture = TestBed.createComponent(BoardColumnComponent);
     element = fixture.nativeElement as HTMLElement;
   });
