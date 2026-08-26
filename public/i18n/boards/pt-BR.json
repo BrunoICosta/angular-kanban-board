@@ -1,0 +1,152 @@
+{
+  "list": {
+    "hello": "Olá, {{name}}",
+    "visitor": "visitante",
+    "title": "Meus quadros",
+    "newBoard": "Novo quadro",
+    "loading": "Carregando quadros",
+    "errorTitle": "Não foi possível carregar seus quadros",
+    "emptyTitle": "Nenhum quadro ainda",
+    "emptyText": "Crie um quadro para organizar as tarefas do seu time em colunas.",
+    "createFirst": "Criar primeiro quadro",
+    "createAnother": "Criar novo quadro"
+  },
+  "tile": {
+    "createdAt": "Criado em {{date}}",
+    "actions": "Ações do quadro {{title}}",
+    "edit": "Editar nome e cor",
+    "delete": "Excluir quadro"
+  },
+  "form": {
+    "newTitle": "Novo quadro",
+    "editTitle": "Editar quadro",
+    "name": "Nome do quadro",
+    "namePlaceholder": "Ex.: Sprint 32, Roadmap, Estudos…",
+    "nameRequired": "Dê um nome ao quadro.",
+    "color": "Cor",
+    "create": "Criar quadro"
+  },
+  "colors": {
+    "violet": "Violeta",
+    "blue": "Azul",
+    "cyan": "Ciano",
+    "green": "Verde",
+    "amber": "Âmbar",
+    "orange": "Laranja",
+    "pink": "Rosa",
+    "slate": "Grafite"
+  },
+  "confirmDeleteBoard": {
+    "title": "Excluir quadro?",
+    "message": "\"{{title}}\" e todas as suas colunas e cartões serão excluídos permanentemente.",
+    "confirm": "Excluir quadro"
+  },
+  "toast": {
+    "boardDeleted": "Quadro \"{{title}}\" excluído.",
+    "wipExceeded": "\"{{column}}\" passou do limite de WIP ({{count}}/{{limit}})."
+  },
+  "board": {
+    "back": "Voltar para meus quadros",
+    "saving": "Salvando…",
+    "saved": "Salvo",
+    "loadingColumns": "Carregando colunas",
+    "errorTitle": "Não foi possível abrir o quadro",
+    "backToBoards": "Voltar aos quadros",
+    "noColumnsTitle": "Este quadro ainda não tem colunas",
+    "noColumnsText": "Crie colunas para representar as etapas do seu fluxo de trabalho.",
+    "useDefaultColumns": "Usar colunas padrão",
+    "defaultColumns": {
+      "todo": "A fazer",
+      "doing": "Em andamento",
+      "done": "Concluído"
+    }
+  },
+  "toolbar": {
+    "label": "Filtrar cartões",
+    "search": "Buscar cartões",
+    "searchPlaceholder": "Buscar cartões…",
+    "labels": "Filtrar por etiqueta",
+    "summary": "{{visible}} de {{total}} cartões",
+    "clear": "Limpar filtros"
+  },
+  "column": {
+    "cardCount": "{{count}} cartões",
+    "actions": "Ações da coluna {{title}}",
+    "edit": "Renomear e limite WIP",
+    "moveLeft": "Mover para a esquerda",
+    "moveRight": "Mover para a direita",
+    "delete": "Excluir coluna",
+    "emptyDrop": "Arraste um cartão para cá",
+    "emptyFilter": "Nenhum cartão corresponde ao filtro",
+    "wip": "Limite de WIP",
+    "wipTitle": "Limite de WIP: {{limit}}",
+    "wipExceeded": "Limite de WIP excedido ({{count}}/{{limit}}). Termine algo antes de puxar mais trabalho.",
+    "addCard": "Adicionar cartão",
+    "newCardLabel": "Título do novo cartão em {{column}}",
+    "newCardPlaceholder": "O que precisa ser feito?",
+    "addColumn": "Adicionar coluna",
+    "newColumnLabel": "Nome da nova coluna",
+    "newColumnPlaceholder": "Nome da coluna"
+  },
+  "columnForm": {
+    "title": "Editar coluna",
+    "name": "Nome",
+    "nameRequired": "Dê um nome à coluna.",
+    "wip": "Limite de WIP",
+    "wipPlaceholder": "Sem limite",
+    "wipHint": "Quantidade máxima de cartões em andamento nesta coluna. Deixe vazio para não limitar.",
+    "wipInvalid": "Use um número inteiro entre 1 e {{max}}."
+  },
+  "confirmDeleteColumn": {
+    "title": "Excluir coluna?",
+    "withCards": "A coluna \"{{title}}\" e seus {{count}} cartões serão excluídos.",
+    "empty": "A coluna \"{{title}}\" será excluída.",
+    "confirm": "Excluir coluna"
+  },
+  "card": {
+    "due": {
+      "overdue": "Atrasado",
+      "today": "Vence hoje",
+      "soon": "Vence em breve",
+      "later": "Prazo"
+    },
+    "checklist": "Checklist: {{done}} de {{total}}",
+    "hasDescription": "Possui descrição"
+  },
+  "labels": {
+    "feature": "Feature",
+    "bug": "Bug",
+    "urgent": "Urgente",
+    "design": "Design",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "docs": "Docs"
+  },
+  "detail": {
+    "dialogTitle": "Detalhes do cartão {{title}}",
+    "titleLabel": "Título do cartão",
+    "titleRequired": "O cartão precisa de um título.",
+    "createdAt": "Criado em {{date}}",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Adicione mais detalhes, links ou critérios de aceite…",
+    "column": "Coluna",
+    "assignee": "Responsável",
+    "assigneePlaceholder": "Nome da pessoa",
+    "dueDate": "Prazo",
+    "labels": "Etiquetas",
+    "delete": "Excluir cartão"
+  },
+  "checklist": {
+    "title": "Checklist",
+    "progress": "Progresso da checklist",
+    "percent": "{{percent}}% concluído",
+    "remove": "Remover item {{text}}",
+    "newItem": "Novo item da checklist",
+    "placeholder": "Adicionar item…"
+  },
+  "confirmDeleteCard": {
+    "title": "Excluir cartão?",
+    "message": "\"{{title}}\" será excluído permanentemente.",
+    "confirm": "Excluir cartão"
+  }
+}

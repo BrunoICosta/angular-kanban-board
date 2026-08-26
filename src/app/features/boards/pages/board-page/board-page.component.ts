@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, from, switchMap } from 'rxjs';
 
@@ -67,6 +68,7 @@ const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
     BoardColumnComponent,
     AddColumnComponent,
     BoardToolbarComponent,
+    TranslocoPipe,
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,

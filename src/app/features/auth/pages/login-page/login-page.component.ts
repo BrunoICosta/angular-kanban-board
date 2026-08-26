@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { AuthActions } from '../../../../core/auth/store/auth.actions';
 import { selectAuthError, selectIsLoggingIn } from '../../../../core/auth/store/auth.reducer';
+import { LanguageSwitcherComponent } from '../../../../core/i18n/language-switcher.component';
 import { ThemeService } from '../../../../core/theme/theme.service';
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 
@@ -11,7 +13,7 @@ export const MIN_PASSWORD_LENGTH = 6;
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, TranslocoPipe, LanguageSwitcherComponent],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

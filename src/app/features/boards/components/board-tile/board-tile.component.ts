@@ -1,14 +1,23 @@
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { DateFormatOptions, TranslocoDatePipe } from '@jsverse/transloco-locale';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { Board, boardColorValue } from '../../models/board.model';
 
 @Component({
   selector: 'app-board-tile',
-  imports: [RouterLink, DatePipe, IconComponent, CdkMenuTrigger, CdkMenu, CdkMenuItem],
+  imports: [
+    RouterLink,
+    TranslocoPipe,
+    TranslocoDatePipe,
+    IconComponent,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
+  ],
   templateUrl: './board-tile.component.html',
   styleUrl: './board-tile.component.scss',
   host: { '[style.--board-color]': 'color()' },
@@ -19,5 +28,10 @@ export class BoardTileComponent {
   readonly edit = output<Board>();
   readonly remove = output<Board>();
 
+  protected readonly dateFormat: DateFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  };
   protected readonly color = computed(() => boardColorValue(this.board().color));
 }

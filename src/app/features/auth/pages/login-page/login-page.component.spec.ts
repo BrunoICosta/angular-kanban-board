@@ -3,6 +3,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
 import { AuthActions } from '../../../../core/auth/store/auth.actions';
 import { initialAuthState } from '../../../../core/auth/store/auth.reducer';
+import { provideI18nTesting } from '../../../../../testing/i18n-testing';
 import { LoginPageComponent } from './login-page.component';
 
 describe('LoginPageComponent', () => {
@@ -13,7 +14,10 @@ describe('LoginPageComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LoginPageComponent],
-      providers: [provideMockStore({ initialState: { auth: initialAuthState } })],
+      providers: [
+        provideMockStore({ initialState: { auth: initialAuthState } }),
+        provideI18nTesting(),
+      ],
     });
     store = TestBed.inject(MockStore);
     spyOn(store, 'dispatch');
@@ -75,12 +79,12 @@ describe('LoginPageComponent', () => {
     );
   });
 
-  it('shows the API error from the store', () => {
-    store.setState({ auth: { ...initialAuthState, error: 'Servidor indisponível.' } });
+  it('translates the error key kept in the store', () => {
+    store.setState({ auth: { ...initialAuthState, error: 'errors.unavailable' } });
     fixture.detectChanges();
 
     expect(element.querySelector('[role="alert"]')?.textContent).toContain(
-      'Servidor indisponível.',
+      'O servidor está indisponível no momento.',
     );
   });
 });

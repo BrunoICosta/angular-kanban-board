@@ -1,0 +1,152 @@
+{
+  "list": {
+    "hello": "Hi, {{name}}",
+    "visitor": "visitor",
+    "title": "My boards",
+    "newBoard": "New board",
+    "loading": "Loading boards",
+    "errorTitle": "We couldn't load your boards",
+    "emptyTitle": "No boards yet",
+    "emptyText": "Create a board to organize your team's tasks in columns.",
+    "createFirst": "Create your first board",
+    "createAnother": "Create a new board"
+  },
+  "tile": {
+    "createdAt": "Created on {{date}}",
+    "actions": "Actions for board {{title}}",
+    "edit": "Edit name and color",
+    "delete": "Delete board"
+  },
+  "form": {
+    "newTitle": "New board",
+    "editTitle": "Edit board",
+    "name": "Board name",
+    "namePlaceholder": "E.g. Sprint 32, Roadmap, Studies…",
+    "nameRequired": "Give the board a name.",
+    "color": "Color",
+    "create": "Create board"
+  },
+  "colors": {
+    "violet": "Violet",
+    "blue": "Blue",
+    "cyan": "Cyan",
+    "green": "Green",
+    "amber": "Amber",
+    "orange": "Orange",
+    "pink": "Pink",
+    "slate": "Slate"
+  },
+  "confirmDeleteBoard": {
+    "title": "Delete board?",
+    "message": "\"{{title}}\" and all of its columns and cards will be permanently deleted.",
+    "confirm": "Delete board"
+  },
+  "toast": {
+    "boardDeleted": "Board \"{{title}}\" deleted.",
+    "wipExceeded": "\"{{column}}\" is over its WIP limit ({{count}}/{{limit}})."
+  },
+  "board": {
+    "back": "Back to my boards",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "loadingColumns": "Loading columns",
+    "errorTitle": "We couldn't open this board",
+    "backToBoards": "Back to boards",
+    "noColumnsTitle": "This board has no columns yet",
+    "noColumnsText": "Create columns to represent the steps of your workflow.",
+    "useDefaultColumns": "Use default columns",
+    "defaultColumns": {
+      "todo": "To do",
+      "doing": "In progress",
+      "done": "Done"
+    }
+  },
+  "toolbar": {
+    "label": "Filter cards",
+    "search": "Search cards",
+    "searchPlaceholder": "Search cards…",
+    "labels": "Filter by label",
+    "summary": "{{visible}} of {{total}} cards",
+    "clear": "Clear filters"
+  },
+  "column": {
+    "cardCount": "{{count}} cards",
+    "actions": "Actions for column {{title}}",
+    "edit": "Rename and WIP limit",
+    "moveLeft": "Move left",
+    "moveRight": "Move right",
+    "delete": "Delete column",
+    "emptyDrop": "Drag a card here",
+    "emptyFilter": "No cards match the filter",
+    "wip": "WIP limit",
+    "wipTitle": "WIP limit: {{limit}}",
+    "wipExceeded": "WIP limit exceeded ({{count}}/{{limit}}). Finish something before pulling more work.",
+    "addCard": "Add card",
+    "newCardLabel": "Title of the new card in {{column}}",
+    "newCardPlaceholder": "What needs to be done?",
+    "addColumn": "Add column",
+    "newColumnLabel": "Name of the new column",
+    "newColumnPlaceholder": "Column name"
+  },
+  "columnForm": {
+    "title": "Edit column",
+    "name": "Name",
+    "nameRequired": "Give the column a name.",
+    "wip": "WIP limit",
+    "wipPlaceholder": "No limit",
+    "wipHint": "Maximum number of cards in progress in this column. Leave empty for no limit.",
+    "wipInvalid": "Use a whole number between 1 and {{max}}."
+  },
+  "confirmDeleteColumn": {
+    "title": "Delete column?",
+    "withCards": "The column \"{{title}}\" and its {{count}} cards will be deleted.",
+    "empty": "The column \"{{title}}\" will be deleted.",
+    "confirm": "Delete column"
+  },
+  "card": {
+    "due": {
+      "overdue": "Overdue",
+      "today": "Due today",
+      "soon": "Due soon",
+      "later": "Due date"
+    },
+    "checklist": "Checklist: {{done}} of {{total}}",
+    "hasDescription": "Has a description"
+  },
+  "labels": {
+    "feature": "Feature",
+    "bug": "Bug",
+    "urgent": "Urgent",
+    "design": "Design",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "docs": "Docs"
+  },
+  "detail": {
+    "dialogTitle": "Details of card {{title}}",
+    "titleLabel": "Card title",
+    "titleRequired": "The card needs a title.",
+    "createdAt": "Created on {{date}}",
+    "description": "Description",
+    "descriptionPlaceholder": "Add more details, links or acceptance criteria…",
+    "column": "Column",
+    "assignee": "Assignee",
+    "assigneePlaceholder": "Person's name",
+    "dueDate": "Due date",
+    "labels": "Labels",
+    "delete": "Delete card"
+  },
+  "checklist": {
+    "title": "Checklist",
+    "progress": "Checklist progress",
+    "percent": "{{percent}}% done",
+    "remove": "Remove item {{text}}",
+    "newItem": "New checklist item",
+    "placeholder": "Add an item…"
+  },
+  "confirmDeleteCard": {
+    "title": "Delete card?",
+    "message": "\"{{title}}\" will be permanently deleted.",
+    "confirm": "Delete card"
+  }
+}

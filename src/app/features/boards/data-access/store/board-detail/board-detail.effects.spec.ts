@@ -5,6 +5,7 @@ import { Action } from '@ngrx/store';
 import { Observable, Subject, of, throwError } from 'rxjs';
 
 import { NotificationService } from '../../../../../core/notifications/notification.service';
+import { provideI18nTesting } from '../../../../../../testing/i18n-testing';
 import { makeBoard, makeCard, makeColumn } from '../../../testing/fixtures';
 import { BoardsApiService } from '../../api/boards-api.service';
 import { CardsApiService } from '../../api/cards-api.service';
@@ -41,6 +42,7 @@ describe('BoardDetailEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         BoardDetailEffects,
+        provideI18nTesting(),
         provideMockActions(() => actions$),
         { provide: BoardsApiService, useValue: boardsApi },
         { provide: ColumnsApiService, useValue: columnsApi },
@@ -79,7 +81,7 @@ describe('BoardDetailEffects', () => {
         expect(action).toEqual(
           BoardApiActions.loadBoardFailure({
             boardId: 'nope',
-            error: 'Este quadro não existe ou foi excluído.',
+            error: 'errors.boardNotFound',
           }),
         );
         done();
@@ -109,7 +111,9 @@ describe('BoardDetailEffects', () => {
       actions$ = of(BoardPageActions.moveCard({ moved, previous }));
 
       effects.moveCard$.subscribe((action) => {
-        expect(action).toEqual(BoardApiActions.moveCardFailure({ previous, error: 'Falhou.' }));
+        expect(action).toEqual(
+          BoardApiActions.moveCardFailure({ previous, error: 'errors.unavailable' }),
+        );
         done();
       });
     });
@@ -142,7 +146,7 @@ describe('BoardDetailEffects', () => {
 
       effects.addColumn$.subscribe((action) => {
         expect(action).toEqual(
-          BoardApiActions.addColumnFailure({ column, error: 'Erro inesperado' }),
+          BoardApiActions.addColumnFailure({ column, error: 'errors.generic' }),
         );
         done();
       });

@@ -36,7 +36,7 @@
         icon="alert"
         tone="danger"
         heading="Não foi possível abrir o quadro"
-        [description]="error() ?? undefined"
+        [description]="error() ?? 'errors.generic' | transloco"
       >
         <a class="btn btn--ghost" routerLink="/boards">Voltar aos quadros</a>
         <button type="button" class="btn btn--primary" (click)="reload()">

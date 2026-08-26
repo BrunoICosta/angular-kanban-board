@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "title": "Organize your team's work on a single board.",
+    "text": "Drag cards between columns, set WIP limits and track checklists — everything is saved automatically."
+  },
+  "login": {
+    "title": "Sign in to Fluxo",
+    "subtitle": "Use any e-mail and a password with at least {{min}} characters.",
+    "expired": "Your session has expired. Sign in again to continue.",
+    "email": "E-mail",
+    "emailPlaceholder": "you@company.com",
+    "emailRequired": "Enter your e-mail.",
+    "emailInvalid": "Enter a valid e-mail.",
+    "password": "Password",
+    "passwordRequired": "Enter your password.",
+    "passwordMin": "The password must have at least {{min}} characters.",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "fillDemo": "Fill in a demo account"
+  }
+}

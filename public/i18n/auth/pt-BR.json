@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "title": "Organize o trabalho do time em um só quadro.",
+    "text": "Arraste cartões entre colunas, defina limites de WIP e acompanhe checklists — tudo salvo automaticamente."
+  },
+  "login": {
+    "title": "Entrar no Fluxo",
+    "subtitle": "Use qualquer e-mail e uma senha com pelo menos {{min}} caracteres.",
+    "expired": "Sua sessão expirou. Entre novamente para continuar.",
+    "email": "E-mail",
+    "emailPlaceholder": "voce@empresa.com",
+    "emailRequired": "Informe seu e-mail.",
+    "emailInvalid": "Digite um e-mail válido.",
+    "password": "Senha",
+    "passwordRequired": "Informe sua senha.",
+    "passwordMin": "A senha precisa ter pelo menos {{min}} caracteres.",
+    "showPassword": "Mostrar",
+    "hidePassword": "Ocultar",
+    "submit": "Entrar",
+    "submitting": "Entrando…",
+    "fillDemo": "Preencher com conta de demonstração"
+  }
+}

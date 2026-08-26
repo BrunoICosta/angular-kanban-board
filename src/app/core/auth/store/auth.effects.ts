@@ -1,9 +1,10 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, exhaustMap, map, of, tap } from 'rxjs';
 
-import { toErrorMessage } from '../../api/http-error';
+import { toErrorKey } from '../../api/http-error';
 import { AuthApiService } from '../auth-api.service';
 import { clearSession, saveSession } from '../session-storage';
 import { AuthActions } from './auth.actions';
@@ -24,7 +25,11 @@ export class AuthEffects {
           catchError((error: unknown) =>
             of(
               AuthActions.loginFailure({
-                error: toErrorMessage(error, 'Não foi possível entrar.'),
+                error:
+                  error instanceof HttpErrorResponse &&
+                  error.status === HttpStatusCode.UnprocessableEntity
+                    ? 'errors.invalidCredentials'
+                    : toErrorKey(error),
               }),
             ),
           ),

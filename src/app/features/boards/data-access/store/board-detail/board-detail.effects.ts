@@ -1,9 +1,10 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, forkJoin, map, mergeMap, of, switchMap, tap } from 'rxjs';
 
-import { toErrorMessage } from '../../../../../core/api/http-error';
+import { toErrorKey } from '../../../../../core/api/http-error';
 import { NotificationService } from '../../../../../core/notifications/notification.service';
 import { BoardsApiService } from '../../api/boards-api.service';
 import { CardsApiService } from '../../api/cards-api.service';
@@ -17,6 +18,7 @@ export class BoardDetailEffects {
   private readonly columnsApi = inject(ColumnsApiService);
   private readonly cardsApi = inject(CardsApiService);
   private readonly notifications = inject(NotificationService);
+  private readonly transloco = inject(TranslocoService);
 
   readonly loadBoard$ = createEffect(() =>
     this.actions$.pipe(
@@ -37,8 +39,8 @@ export class BoardDetailEffects {
                 boardId,
                 error:
                   error instanceof HttpErrorResponse && error.status === HttpStatusCode.NotFound
-                    ? 'Este quadro não existe ou foi excluído.'
-                    : toErrorMessage(error),
+                    ? 'errors.boardNotFound'
+                    : toErrorKey(error),
               }),
             ),
           ),
@@ -54,7 +56,7 @@ export class BoardDetailEffects {
         this.columnsApi.create(column).pipe(
           map((saved) => BoardApiActions.addColumnSuccess({ column: saved })),
           catchError((error: unknown) =>
-            of(BoardApiActions.addColumnFailure({ column, error: toErrorMessage(error) })),
+            of(BoardApiActions.addColumnFailure({ column, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -68,7 +70,7 @@ export class BoardDetailEffects {
         this.columnsApi.update(column).pipe(
           map((saved) => BoardApiActions.updateColumnSuccess({ column: saved })),
           catchError((error: unknown) =>
-            of(BoardApiActions.updateColumnFailure({ previous, error: toErrorMessage(error) })),
+            of(BoardApiActions.updateColumnFailure({ previous, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -82,9 +84,7 @@ export class BoardDetailEffects {
         this.columnsApi.delete(column.id).pipe(
           map(() => BoardApiActions.deleteColumnSuccess({ column })),
           catchError((error: unknown) =>
-            of(
-              BoardApiActions.deleteColumnFailure({ column, cards, error: toErrorMessage(error) }),
-            ),
+            of(BoardApiActions.deleteColumnFailure({ column, cards, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -98,7 +98,7 @@ export class BoardDetailEffects {
         this.columnsApi.updateMany(moved).pipe(
           map((columns) => BoardApiActions.moveColumnSuccess({ columns })),
           catchError((error: unknown) =>
-            of(BoardApiActions.moveColumnFailure({ previous, error: toErrorMessage(error) })),
+            of(BoardApiActions.moveColumnFailure({ previous, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -112,7 +112,7 @@ export class BoardDetailEffects {
         this.cardsApi.create(card).pipe(
           map((saved) => BoardApiActions.addCardSuccess({ card: saved })),
           catchError((error: unknown) =>
-            of(BoardApiActions.addCardFailure({ card, error: toErrorMessage(error) })),
+            of(BoardApiActions.addCardFailure({ card, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -126,7 +126,7 @@ export class BoardDetailEffects {
         this.cardsApi.update(card).pipe(
           map((saved) => BoardApiActions.updateCardSuccess({ card: saved })),
           catchError((error: unknown) =>
-            of(BoardApiActions.updateCardFailure({ previous, error: toErrorMessage(error) })),
+            of(BoardApiActions.updateCardFailure({ previous, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -140,7 +140,7 @@ export class BoardDetailEffects {
         this.cardsApi.delete(card.id).pipe(
           map(() => BoardApiActions.deleteCardSuccess({ card })),
           catchError((error: unknown) =>
-            of(BoardApiActions.deleteCardFailure({ card, error: toErrorMessage(error) })),
+            of(BoardApiActions.deleteCardFailure({ card, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -158,7 +158,7 @@ export class BoardDetailEffects {
         this.cardsApi.updateMany(moved).pipe(
           map((cards) => BoardApiActions.moveCardSuccess({ cards })),
           catchError((error: unknown) =>
-            of(BoardApiActions.moveCardFailure({ previous, error: toErrorMessage(error) })),
+            of(BoardApiActions.moveCardFailure({ previous, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -179,7 +179,13 @@ export class BoardDetailEffects {
           BoardApiActions.updateCardFailure,
           BoardApiActions.deleteCardFailure,
         ),
-        tap(({ error }) => this.notifications.error(`${error} A alteração foi desfeita.`)),
+        tap(({ error }) =>
+          this.notifications.error(
+            this.transloco.translate('toast.rolledBack', {
+              error: this.transloco.translate(error),
+            }),
+          ),
+        ),
       ),
     { dispatch: false },
   );

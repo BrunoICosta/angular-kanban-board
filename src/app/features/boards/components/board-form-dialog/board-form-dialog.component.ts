@@ -1,6 +1,7 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { BOARD_COLORS, Board, BoardColorId } from '../../models/board.model';
@@ -19,7 +20,7 @@ export const BOARD_TITLE_MAX_LENGTH = 60;
 
 @Component({
   selector: 'app-board-form-dialog',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, TranslocoPipe],
   templateUrl: './board-form-dialog.component.html',
   styleUrl: './board-form-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

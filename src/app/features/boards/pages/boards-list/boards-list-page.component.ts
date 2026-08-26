@@ -1,6 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
@@ -26,7 +27,7 @@ import { Board } from '../../models/board.model';
 
 @Component({
   selector: 'app-boards-list-page',
-  imports: [BoardTileComponent, EmptyStateComponent, IconComponent],
+  imports: [BoardTileComponent, EmptyStateComponent, IconComponent, TranslocoPipe],
   templateUrl: './boards-list-page.component.html',
   styleUrl: './boards-list-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +37,7 @@ export class BoardsListPageComponent implements OnInit {
   private readonly dialog = inject(Dialog);
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly transloco = inject(TranslocoService);
 
   protected readonly boards = this.store.selectSignal(selectAllBoards);
   protected readonly status = this.store.selectSignal(selectBoardsStatus);
@@ -72,9 +74,11 @@ export class BoardsListPageComponent implements OnInit {
   protected deleteBoard(board: Board): void {
     this.confirmDialog
       .confirm({
-        title: 'Excluir quadro?',
-        message: `"${board.title}" e todas as suas colunas e cartões serão excluídos permanentemente.`,
-        confirmLabel: 'Excluir quadro',
+        title: this.transloco.translate('boards.confirmDeleteBoard.title'),
+        message: this.transloco.translate('boards.confirmDeleteBoard.message', {
+          title: board.title,
+        }),
+        confirmLabel: this.transloco.translate('boards.confirmDeleteBoard.confirm'),
       })
       .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.store.dispatch(BoardsPageActions.deleteBoard({ board })));

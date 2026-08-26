@@ -50,7 +50,7 @@ describe('AuthEffects', () => {
     });
   });
 
-  it('uses the API error message when login fails', (done) => {
+  it('maps a rejected login to a translation key', (done) => {
     api.login.and.returnValue(
       throwError(
         () => new HttpErrorResponse({ status: 422, error: { message: 'Senha muito curta.' } }),
@@ -59,7 +59,7 @@ describe('AuthEffects', () => {
     actions$ = of(AuthActions.login({ credentials, returnUrl: null }));
 
     effects.login$.subscribe((action) => {
-      expect(action).toEqual(AuthActions.loginFailure({ error: 'Senha muito curta.' }));
+      expect(action).toEqual(AuthActions.loginFailure({ error: 'errors.invalidCredentials' }));
       done();
     });
   });

@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, mergeMap, of, switchMap, tap } from 'rxjs';
 
-import { toErrorMessage } from '../../../../../core/api/http-error';
+import { toErrorKey } from '../../../../../core/api/http-error';
 import { NotificationService } from '../../../../../core/notifications/notification.service';
 import { BoardsApiService } from '../../api/boards-api.service';
 import { BoardsApiActions, BoardsPageActions } from './boards.actions';
@@ -12,6 +13,7 @@ export class BoardsEffects {
   private readonly actions$ = inject(Actions);
   private readonly boardsApi = inject(BoardsApiService);
   private readonly notifications = inject(NotificationService);
+  private readonly transloco = inject(TranslocoService);
 
   readonly loadBoards$ = createEffect(() =>
     this.actions$.pipe(
@@ -20,7 +22,7 @@ export class BoardsEffects {
         this.boardsApi.getAll().pipe(
           map((boards) => BoardsApiActions.loadBoardsSuccess({ boards })),
           catchError((error: unknown) =>
-            of(BoardsApiActions.loadBoardsFailure({ error: toErrorMessage(error) })),
+            of(BoardsApiActions.loadBoardsFailure({ error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -34,7 +36,7 @@ export class BoardsEffects {
         this.boardsApi.create(board).pipe(
           map((saved) => BoardsApiActions.createBoardSuccess({ board: saved })),
           catchError((error: unknown) =>
-            of(BoardsApiActions.createBoardFailure({ board, error: toErrorMessage(error) })),
+            of(BoardsApiActions.createBoardFailure({ board, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -49,7 +51,7 @@ export class BoardsEffects {
         this.boardsApi.update(board).pipe(
           map((saved) => BoardsApiActions.updateBoardSuccess({ board: saved })),
           catchError((error: unknown) =>
-            of(BoardsApiActions.updateBoardFailure({ previous, error: toErrorMessage(error) })),
+            of(BoardsApiActions.updateBoardFailure({ previous, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -63,7 +65,7 @@ export class BoardsEffects {
         this.boardsApi.delete(board.id).pipe(
           map(() => BoardsApiActions.deleteBoardSuccess({ board })),
           catchError((error: unknown) =>
-            of(BoardsApiActions.deleteBoardFailure({ board, error: toErrorMessage(error) })),
+            of(BoardsApiActions.deleteBoardFailure({ board, error: toErrorKey(error) })),
           ),
         ),
       ),
@@ -78,7 +80,13 @@ export class BoardsEffects {
           BoardsApiActions.updateBoardFailure,
           BoardsApiActions.deleteBoardFailure,
         ),
-        tap(({ error }) => this.notifications.error(`${error} A alteração foi desfeita.`)),
+        tap(({ error }) =>
+          this.notifications.error(
+            this.transloco.translate('toast.rolledBack', {
+              error: this.transloco.translate(error),
+            }),
+          ),
+        ),
       ),
     { dispatch: false },
   );
@@ -87,7 +95,11 @@ export class BoardsEffects {
     () =>
       this.actions$.pipe(
         ofType(BoardsApiActions.deleteBoardSuccess),
-        tap(({ board }) => this.notifications.success(`Quadro "${board.title}" excluído.`)),
+        tap(({ board }) =>
+          this.notifications.success(
+            this.transloco.translate('boards.toast.boardDeleted', { title: board.title }),
+          ),
+        ),
       ),
     { dispatch: false },
   );

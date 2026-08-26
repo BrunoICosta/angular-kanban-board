@@ -5,6 +5,7 @@ import { Action } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
 
 import { NotificationService } from '../../../../../core/notifications/notification.service';
+import { provideI18nTesting } from '../../../../../../testing/i18n-testing';
 import { makeBoard } from '../../../testing/fixtures';
 import { BoardsApiService } from '../../api/boards-api.service';
 import { BoardsApiActions, BoardsPageActions } from './boards.actions';
@@ -34,6 +35,7 @@ describe('BoardsEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         BoardsEffects,
+        provideI18nTesting(),
         provideMockActions(() => actions$),
         { provide: BoardsApiService, useValue: api },
         { provide: NotificationService, useValue: notifications },
@@ -52,12 +54,12 @@ describe('BoardsEffects', () => {
     });
   });
 
-  it('maps a load error to a readable message', (done) => {
+  it('maps a load error to a translation key', (done) => {
     api.getAll.and.returnValue(throwError(() => serverError));
     actions$ = of(BoardsPageActions.opened());
 
     effects.loadBoards$.subscribe((action) => {
-      expect(action).toEqual(BoardsApiActions.loadBoardsFailure({ error: 'Fora do ar.' }));
+      expect(action).toEqual(BoardsApiActions.loadBoardsFailure({ error: 'errors.unavailable' }));
       done();
     });
   });
@@ -67,7 +69,9 @@ describe('BoardsEffects', () => {
     actions$ = of(BoardsPageActions.createBoard({ board }));
 
     effects.createBoard$.subscribe((action) => {
-      expect(action).toEqual(BoardsApiActions.createBoardFailure({ board, error: 'Fora do ar.' }));
+      expect(action).toEqual(
+        BoardsApiActions.createBoardFailure({ board, error: 'errors.unavailable' }),
+      );
       done();
     });
   });
@@ -79,7 +83,7 @@ describe('BoardsEffects', () => {
 
     effects.updateBoard$.subscribe((action) => {
       expect(action).toEqual(
-        BoardsApiActions.updateBoardFailure({ previous: board, error: 'Fora do ar.' }),
+        BoardsApiActions.updateBoardFailure({ previous: board, error: 'errors.unavailable' }),
       );
       done();
     });
@@ -97,10 +101,12 @@ describe('BoardsEffects', () => {
   });
 
   it('tells the user when a change is rolled back', () => {
-    actions$ = of(BoardsApiActions.deleteBoardFailure({ board, error: 'Fora do ar.' }));
+    actions$ = of(BoardsApiActions.deleteBoardFailure({ board, error: 'errors.unavailable' }));
 
     effects.notifyRollback$.subscribe();
 
-    expect(notifications.error).toHaveBeenCalledWith('Fora do ar. A alteração foi desfeita.');
+    expect(notifications.error).toHaveBeenCalledWith(
+      'O servidor está indisponível no momento. A alteração foi desfeita.',
+    );
   });
 });

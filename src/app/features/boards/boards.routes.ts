@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideTranslocoScope } from '@jsverse/transloco';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
@@ -18,6 +19,8 @@ export const BOARDS_ROUTES: Routes = [
     // Feature state, effects and API clients are registered here so they ship with this
     // lazy chunk instead of the initial bundle.
     providers: [
+      // Strings from public/i18n/boards/<lang>.json, loaded with this chunk.
+      provideTranslocoScope('boards'),
       BoardsApiService,
       ColumnsApiService,
       CardsApiService,

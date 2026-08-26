@@ -1,31 +1,38 @@
 <form class="dialog dialog--sm" [formGroup]="form" (ngSubmit)="submit()" novalidate>
   <header class="dialog__header">
     <h2 class="dialog__title" id="board-form-title">
-      {{ isEdit ? 'Editar quadro' : 'Novo quadro' }}
+      {{ (isEdit ? 'boards.form.editTitle' : 'boards.form.newTitle') | transloco }}
     </h2>
-    <button type="button" class="icon-btn" aria-label="Fechar" (click)="ref.close()">
+    <button
+      type="button"
+      class="icon-btn"
+      [attr.aria-label]="'common.close' | transloco"
+      (click)="ref.close()"
+    >
       <app-icon name="x" />
     </button>
   </header>
 
   <div class="field">
-    <label class="field__label" for="board-title">Nome do quadro</label>
+    <label class="field__label" for="board-title">{{ 'boards.form.name' | transloco }}</label>
     <input
       id="board-title"
       class="input"
       formControlName="title"
-      placeholder="Ex.: Sprint 32, Roadmap, Estudos…"
+      [placeholder]="'boards.form.namePlaceholder' | transloco"
       [attr.maxlength]="maxLength"
       [attr.aria-invalid]="form.controls.title.invalid && form.controls.title.touched"
       aria-describedby="board-title-error"
     />
     @if (form.controls.title.touched && form.controls.title.invalid) {
-      <span id="board-title-error" class="field__error">Dê um nome ao quadro.</span>
+      <span id="board-title-error" class="field__error">{{
+        'boards.form.nameRequired' | transloco
+      }}</span>
     }
   </div>
 
   <fieldset class="colors">
-    <legend class="field__label">Cor</legend>
+    <legend class="field__label">{{ 'boards.form.color' | transloco }}</legend>
     <div class="colors__list">
       @for (color of colors; track color.id) {
         <label class="swatch" [style.--swatch]="color.value">
@@ -33,16 +40,18 @@
           <span class="swatch__dot" aria-hidden="true">
             <app-icon name="check" [size]="14" />
           </span>
-          <span class="sr-only">{{ color.name }}</span>
+          <span class="sr-only">{{ 'boards.colors.' + color.id | transloco }}</span>
         </label>
       }
     </div>
   </fieldset>
 
   <footer class="dialog__footer">
-    <button type="button" class="btn btn--ghost" (click)="ref.close()">Cancelar</button>
+    <button type="button" class="btn btn--ghost" (click)="ref.close()">
+      {{ 'common.cancel' | transloco }}
+    </button>
     <button type="submit" class="btn btn--primary">
-      {{ isEdit ? 'Salvar' : 'Criar quadro' }}
+      {{ (isEdit ? 'common.save' : 'boards.form.create') | transloco }}
     </button>
   </footer>
 </form>

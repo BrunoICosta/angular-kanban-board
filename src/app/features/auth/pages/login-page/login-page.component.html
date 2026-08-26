@@ -2,11 +2,8 @@
   <section class="login__hero">
     <div class="hero">
       <p class="hero__eyebrow">Fluxo</p>
-      <p class="hero__title">Organize o trabalho do time em um só quadro.</p>
-      <p class="hero__text">
-        Arraste cartões entre colunas, defina limites de WIP e acompanhe checklists — tudo salvo
-        automaticamente.
-      </p>
+      <p class="hero__title">{{ 'auth.hero.title' | transloco }}</p>
+      <p class="hero__text">{{ 'auth.hero.text' | transloco }}</p>
 
       <div class="preview" aria-hidden="true">
         @for (column of previewColumns; track $index) {
@@ -22,64 +19,70 @@
   </section>
 
   <section class="login__panel">
-    <button
-      type="button"
-      class="icon-btn login__theme"
-      (click)="themeService.toggle()"
-      [attr.aria-label]="
-        themeService.theme() === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro'
-      "
-    >
-      <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" />
-    </button>
+    <div class="login__tools">
+      <app-language-switcher />
+      <button
+        type="button"
+        class="icon-btn"
+        (click)="themeService.toggle()"
+        [attr.aria-label]="
+          (themeService.theme() === 'dark' ? 'header.themeToLight' : 'header.themeToDark')
+            | transloco
+        "
+      >
+        <app-icon [name]="themeService.theme() === 'dark' ? 'sun' : 'moon'" />
+      </button>
+    </div>
 
     <main id="main" class="card" tabindex="-1">
       <div class="card__header">
         <span class="logo" aria-hidden="true"><span></span><span></span><span></span></span>
-        <h1 class="card__title">Entrar no Fluxo</h1>
-        <p class="card__subtitle">Use qualquer e-mail e uma senha com pelo menos 6 caracteres.</p>
+        <h1 class="card__title">{{ 'auth.login.title' | transloco }}</h1>
+        <p class="card__subtitle">
+          {{ 'auth.login.subtitle' | transloco: { min: minPasswordLength } }}
+        </p>
       </div>
 
       @if (expired()) {
         <p class="alert alert--warning" role="status">
           <app-icon name="alert" [size]="16" />
-          Sua sessão expirou. Entre novamente para continuar.
+          {{ 'auth.login.expired' | transloco }}
         </p>
       }
 
       @if (error(); as message) {
         <p class="alert alert--danger" role="alert">
           <app-icon name="alert" [size]="16" />
-          {{ message }}
+          {{ message | transloco }}
         </p>
       }
 
       <form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
         <div class="field">
-          <label class="field__label" for="email">E-mail</label>
+          <label class="field__label" for="email">{{ 'auth.login.email' | transloco }}</label>
           <input
             id="email"
             class="input"
             type="email"
             formControlName="email"
             autocomplete="email"
-            placeholder="voce@empresa.com"
+            [placeholder]="'auth.login.emailPlaceholder' | transloco"
             [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
             aria-describedby="email-error"
           />
           @if (form.controls.email.touched && form.controls.email.errors; as errors) {
             <span id="email-error" class="field__error">
               @if (errors['required']) {
-                Informe seu e-mail.
+                {{ 'auth.login.emailRequired' | transloco }}
               } @else {
-                Digite um e-mail válido.
+                {{ 'auth.login.emailInvalid' | transloco }}
               }
             </span>
           }
         </div>
 
         <div class="field">
-          <label class="field__label" for="password">Senha</label>
+          <label class="field__label" for="password">{{ 'auth.login.password' | transloco }}</label>
           <div class="password">
             <input
               id="password"
@@ -97,15 +100,17 @@
               (click)="showPassword.set(!showPassword())"
               [attr.aria-pressed]="showPassword()"
             >
-              {{ showPassword() ? 'Ocultar' : 'Mostrar' }}
+              {{
+                (showPassword() ? 'auth.login.hidePassword' : 'auth.login.showPassword') | transloco
+              }}
             </button>
           </div>
           @if (form.controls.password.touched && form.controls.password.errors; as errors) {
             <span id="password-error" class="field__error">
               @if (errors['required']) {
-                Informe sua senha.
+                {{ 'auth.login.passwordRequired' | transloco }}
               } @else {
-                A senha precisa ter pelo menos {{ minPasswordLength }} caracteres.
+                {{ 'auth.login.passwordMin' | transloco: { min: minPasswordLength } }}
               }
             </span>
           }
@@ -114,15 +119,15 @@
         <button type="submit" class="btn btn--primary btn--block" [disabled]="isLoggingIn()">
           @if (isLoggingIn()) {
             <span class="spinner" aria-hidden="true"></span>
-            Entrando…
+            {{ 'auth.login.submitting' | transloco }}
           } @else {
-            Entrar
+            {{ 'auth.login.submit' | transloco }}
           }
         </button>
       </form>
 
       <button type="button" class="btn btn--ghost btn--block" (click)="fillDemoAccount()">
-        Preencher com conta de demonstração
+        {{ 'auth.login.fillDemo' | transloco }}
       </button>
     </main>
   </section>

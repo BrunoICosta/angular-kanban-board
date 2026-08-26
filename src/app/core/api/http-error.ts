@@ -1,24 +1,21 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
-/** Turns any error thrown by HttpClient (or elsewhere) into a user-facing message in pt-BR. */
-export function toErrorMessage(
-  error: unknown,
-  fallback = 'Algo deu errado. Tente novamente.',
-): string {
-  if (error instanceof HttpErrorResponse) {
-    if (error.status === 0) {
-      return 'Sem conexão com o servidor.';
-    }
-    const body: unknown = error.error;
-    if (body && typeof body === 'object' && 'message' in body && typeof body.message === 'string') {
-      return body.message;
-    }
-    if (error.status >= 500) {
-      return 'O servidor está indisponível no momento.';
-    }
+/**
+ * Maps any error (usually an `HttpErrorResponse`) to a translation key under `errors.*`.
+ * The store keeps keys instead of text, so messages follow language changes and stay testable.
+ */
+export function toErrorKey(error: unknown, fallback = 'errors.generic'): string {
+  if (!(error instanceof HttpErrorResponse)) {
+    return fallback;
   }
-  if (error instanceof Error && error.message) {
-    return error.message;
+  switch (error.status) {
+    case 0:
+      return 'errors.offline';
+    case HttpStatusCode.Unauthorized:
+      return 'errors.unauthorized';
+    case HttpStatusCode.NotFound:
+      return 'errors.notFound';
+    default:
+      return error.status >= 500 ? 'errors.unavailable' : fallback;
   }
-  return fallback;
 }

@@ -1,18 +1,23 @@
 <section class="page" aria-labelledby="boards-title">
   <header class="page__header">
     <div>
-      <p class="page__eyebrow">Olá, {{ user()?.name ?? 'visitante' }}</p>
-      <h1 id="boards-title" class="page__title">Meus quadros</h1>
+      <p class="page__eyebrow">
+        {{
+          'boards.list.hello'
+            | transloco: { name: user()?.name ?? ('boards.list.visitor' | transloco) }
+        }}
+      </p>
+      <h1 id="boards-title" class="page__title">{{ 'boards.list.title' | transloco }}</h1>
     </div>
     <button type="button" class="btn btn--primary" (click)="createBoard()">
       <app-icon name="plus" [size]="16" />
-      Novo quadro
+      {{ 'boards.list.newBoard' | transloco }}
     </button>
   </header>
 
   @switch (status()) {
     @case ('loading') {
-      <ul class="grid" aria-busy="true" aria-label="Carregando quadros">
+      <ul class="grid" aria-busy="true" [attr.aria-label]="'boards.list.loading' | transloco">
         @for (item of skeletons; track item) {
           <li class="skeleton"></li>
         }
@@ -22,24 +27,24 @@
       <app-empty-state
         icon="alert"
         tone="danger"
-        heading="Não foi possível carregar seus quadros"
-        [description]="error() ?? undefined"
+        [heading]="'boards.list.errorTitle' | transloco"
+        [description]="error() ?? 'errors.generic' | transloco"
       >
         <button type="button" class="btn btn--primary" (click)="reload()">
           <app-icon name="refresh" [size]="16" />
-          Tentar novamente
+          {{ 'common.retry' | transloco }}
         </button>
       </app-empty-state>
     }
     @default {
       @if (boards().length === 0) {
         <app-empty-state
-          heading="Nenhum quadro ainda"
-          description="Crie um quadro para organizar as tarefas do seu time em colunas."
+          [heading]="'boards.list.emptyTitle' | transloco"
+          [description]="'boards.list.emptyText' | transloco"
         >
           <button type="button" class="btn btn--primary" (click)="createBoard()">
             <app-icon name="plus" [size]="16" />
-            Criar primeiro quadro
+            {{ 'boards.list.createFirst' | transloco }}
           </button>
         </app-empty-state>
       } @else {
@@ -56,7 +61,7 @@
           <li>
             <button type="button" class="new-tile" (click)="createBoard()">
               <app-icon name="plus" [size]="20" />
-              Criar novo quadro
+              {{ 'boards.list.createAnother' | transloco }}
             </button>
           </li>
         </ul>
