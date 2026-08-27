@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  Injector,
   computed,
   effect,
   inject,
@@ -12,7 +13,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, from, switchMap } from 'rxjs';
 
@@ -57,7 +58,8 @@ import { boardColorValue } from '../../models/board.model';
 import { Card, LabelId } from '../../models/card.model';
 import { Column } from '../../models/column.model';
 
-const DEFAULT_COLUMNS = ['A fazer', 'Em andamento', 'Concluído'];
+/** Translation keys of the columns created by 'Use default columns'. */
+const DEFAULT_COLUMNS = ['todo', 'doing', 'done'] as const;
 
 @Component({
   selector: 'app-board-page',
@@ -83,6 +85,9 @@ export class BoardPageComponent {
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly notifications = inject(NotificationService);
   private readonly titleStrategy = inject(TranslatedTitleStrategy);
+  private readonly transloco = inject(TranslocoService);
+  /** Dialogs get this injector so they see the feature's providers (e.g. the i18n scope). */
+  private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Route param `:id` (bound through `withComponentInputBinding`). */
@@ -153,13 +158,16 @@ export class BoardPageComponent {
   }
 
   protected addDefaultColumns(): void {
-    DEFAULT_COLUMNS.forEach((title) => this.addColumn(title));
+    DEFAULT_COLUMNS.forEach((key) =>
+      this.addColumn(this.transloco.translate(`boards.board.defaultColumns.${key}`)),
+    );
   }
 
   protected editColumn(previous: Column): void {
     this.dialog
       .open<ColumnFormResult, Column>(ColumnFormDialogComponent, {
         ...dialogConfig,
+        injector: this.injector,
         data: previous,
         ariaLabelledBy: 'column-form-title',
       })
@@ -180,10 +188,17 @@ export class BoardPageComponent {
   protected deleteColumn(column: Column): void {
     const cards = this.cardsByColumn()[column.id] ?? [];
     const message = cards.length
-      ? `A coluna "${column.title}" e seus ${cards.length} cartões serão excluídos.`
-      : `A coluna "${column.title}" será excluída.`;
+      ? this.transloco.translate('boards.confirmDeleteColumn.withCards', {
+          title: column.title,
+          count: cards.length,
+        })
+      : this.transloco.translate('boards.confirmDeleteColumn.empty', { title: column.title });
     this.confirmDialog
-      .confirm({ title: 'Excluir coluna?', message, confirmLabel: 'Excluir coluna' })
+      .confirm({
+        title: this.transloco.translate('boards.confirmDeleteColumn.title'),
+        message,
+        confirmLabel: this.transloco.translate('boards.confirmDeleteColumn.confirm'),
+      })
       .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.store.dispatch(BoardPageActions.deleteColumn({ column, cards })));
   }
@@ -214,6 +229,7 @@ export class BoardPageComponent {
           ({ CardDetailDialogComponent }) =>
             this.dialog.open<CardDetailResult, CardDetailDialogData>(CardDetailDialogComponent, {
               ...dialogConfig,
+              injector: this.injector,
               data: { card, columns: this.columns() },
               ariaLabelledBy: 'card-dialog-title',
             }).closed,
@@ -241,9 +257,11 @@ export class BoardPageComponent {
   private deleteCard(card: Card): void {
     this.confirmDialog
       .confirm({
-        title: 'Excluir cartão?',
-        message: `"${card.title}" será excluído permanentemente.`,
-        confirmLabel: 'Excluir cartão',
+        title: this.transloco.translate('boards.confirmDeleteCard.title'),
+        message: this.transloco.translate('boards.confirmDeleteCard.message', {
+          title: card.title,
+        }),
+        confirmLabel: this.transloco.translate('boards.confirmDeleteCard.confirm'),
       })
       .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.store.dispatch(BoardPageActions.deleteCard({ card })));
@@ -264,7 +282,11 @@ export class BoardPageComponent {
     const countAfter = (cardsByColumn[toColumnId]?.length ?? 0) + 1;
     if (target && cameFromAnotherColumn && wipStatus(countAfter, target.wipLimit) === 'over') {
       this.notifications.info(
-        `"${target.title}" passou do limite de WIP (${countAfter}/${target.wipLimit}).`,
+        this.transloco.translate('boards.toast.wipExceeded', {
+          column: target.title,
+          count: countAfter,
+          limit: target.wipLimit,
+        }),
       );
     }
   }

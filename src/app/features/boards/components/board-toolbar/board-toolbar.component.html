@@ -1,18 +1,18 @@
-<div class="toolbar" role="search" aria-label="Filtrar cartões">
+<div class="toolbar" role="search" [attr.aria-label]="'boards.toolbar.label' | transloco">
   <div class="search">
     <app-icon class="search__icon" name="search" [size]="16" />
-    <label class="sr-only" for="board-search">Buscar cartões</label>
+    <label class="sr-only" for="board-search">{{ 'boards.toolbar.search' | transloco }}</label>
     <input
       id="board-search"
       class="input search__input"
       type="search"
-      placeholder="Buscar cartões…"
+      [placeholder]="'boards.toolbar.searchPlaceholder' | transloco"
       autocomplete="off"
       [formControl]="search"
     />
   </div>
 
-  <div class="labels" role="group" aria-label="Filtrar por etiqueta">
+  <div class="labels" role="group" [attr.aria-label]="'boards.toolbar.labels' | transloco">
     @for (label of labels; track label.id) {
       <button
         type="button"
@@ -22,17 +22,17 @@
         [attr.aria-pressed]="filter().labels.includes(label.id)"
         (click)="labelToggled.emit(label.id)"
       >
-        {{ label.name }}
+        {{ 'boards.labels.' + label.id | transloco }}
       </button>
     }
   </div>
 
   @if (active()) {
     <p class="summary" role="status">
-      {{ summary().visible }} de {{ summary().total }} cartões
+      {{ 'boards.toolbar.summary' | transloco: summary() }}
       <button type="button" class="btn btn--ghost btn--sm" (click)="clear()">
         <app-icon name="x" [size]="14" />
-        Limpar filtros
+        {{ 'boards.toolbar.clear' | transloco }}
       </button>
     </p>
   }

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, model } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { createId } from '../../../../shared/utils/id';
@@ -11,7 +12,7 @@ export const CHECKLIST_ITEM_MAX_LENGTH = 140;
 /** Editable checklist bound with `[(items)]`. Every change emits a new array (immutable). */
 @Component({
   selector: 'app-checklist-editor',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, TranslocoPipe],
   templateUrl: './checklist-editor.component.html',
   styleUrl: './checklist-editor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

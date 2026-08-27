@@ -2,7 +2,9 @@
   @if (labels().length) {
     <span class="card__labels">
       @for (label of labels(); track label.id) {
-        <span class="label" [style.--label-color]="label.color">{{ label.name }}</span>
+        <span class="label" [style.--label-color]="label.color">
+          {{ 'boards.labels.' + label.id | transloco }}
+        </span>
       }
     </span>
   }
@@ -11,16 +13,16 @@
 
   @if (card().dueDate || progress().total || card().description || card().assignee) {
     <span class="card__meta">
-      @if (card().dueDate; as dueDate) {
+      @if (dueDate(); as dueDate) {
         <span
           class="badge"
           [class.badge--danger]="dueStatus() === 'overdue'"
           [class.badge--warning]="dueStatus() === 'today' || dueStatus() === 'soon'"
-          [attr.title]="dueLabel()"
+          [attr.title]="dueLabelKey() | transloco"
         >
           <app-icon name="calendar" [size]="13" />
-          {{ dueDate | date: 'd MMM' }}
-          <span class="sr-only">({{ dueLabel() }})</span>
+          {{ dueDate | translocoDate: dueFormat }}
+          <span class="sr-only">({{ dueLabelKey() | transloco }})</span>
         </span>
       }
 
@@ -28,7 +30,7 @@
         <span
           class="badge"
           [class.badge--success]="progress().complete"
-          [attr.title]="'Checklist: ' + progress().done + ' de ' + progress().total"
+          [attr.title]="'boards.card.checklist' | transloco: progress()"
         >
           <app-icon name="checklist" [size]="13" />
           {{ progress().done }}/{{ progress().total }}
@@ -36,9 +38,9 @@
       }
 
       @if (card().description) {
-        <span class="badge badge--plain" title="Possui descrição">
+        <span class="badge badge--plain" [attr.title]="'boards.card.hasDescription' | transloco">
           <app-icon name="text" [size]="13" />
-          <span class="sr-only">Possui descrição</span>
+          <span class="sr-only">{{ 'boards.card.hasDescription' | transloco }}</span>
         </span>
       }
 

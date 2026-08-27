@@ -1,5 +1,12 @@
 import { Dialog } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  Injector,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -38,6 +45,7 @@ export class BoardsListPageComponent implements OnInit {
   private readonly confirmDialog = inject(ConfirmDialogService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly transloco = inject(TranslocoService);
+  private readonly injector = inject(Injector);
 
   protected readonly boards = this.store.selectSignal(selectAllBoards);
   protected readonly status = this.store.selectSignal(selectBoardsStatus);
@@ -88,6 +96,7 @@ export class BoardsListPageComponent implements OnInit {
     return this.dialog
       .open<BoardFormResult, BoardFormDialogData>(BoardFormDialogComponent, {
         ...dialogConfig,
+        injector: this.injector,
         data,
         ariaLabelledBy: 'board-form-title',
       })

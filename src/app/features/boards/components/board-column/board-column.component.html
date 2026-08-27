@@ -7,7 +7,10 @@
   <header class="column__header" cdkDragHandle>
     <app-icon class="column__grip" name="grip" [size]="14" />
     <h2 class="column__title" [id]="'column-title-' + column().id">{{ column().title }}</h2>
-    <span class="column__count" [attr.aria-label]="countLabel() + ' cartões'">
+    <span
+      class="column__count"
+      [attr.aria-label]="'boards.column.cardCount' | transloco: { count: countLabel() }"
+    >
       {{ countLabel() }}
     </span>
     @if (column().wipLimit; as limit) {
@@ -15,10 +18,10 @@
         class="wip"
         [class.wip--at-limit]="wip() === 'at-limit'"
         [class.wip--over]="wip() === 'over'"
-        [attr.title]="'Limite de WIP: ' + limit"
+        [attr.title]="'boards.column.wipTitle' | transloco: { limit }"
       >
         <app-icon name="gauge" [size]="12" />
-        <span class="sr-only">Limite de WIP</span>
+        <span class="sr-only">{{ 'boards.column.wip' | transloco }}</span>
         {{ limit }}
       </span>
     }
@@ -26,7 +29,7 @@
       type="button"
       class="icon-btn icon-btn--sm"
       [cdkMenuTriggerFor]="menu"
-      [attr.aria-label]="'Ações da coluna ' + column().title"
+      [attr.aria-label]="'boards.column.actions' | transloco: { title: column().title }"
     >
       <app-icon name="more" [size]="16" />
     </button>
@@ -35,8 +38,10 @@
   @if (wip() === 'over') {
     <p class="column__warning" role="status">
       <app-icon name="alert" [size]="14" />
-      Limite de WIP excedido ({{ totalCount() ?? cards().length }}/{{ column().wipLimit }}). Termine
-      algo antes de puxar mais trabalho.
+      {{
+        'boards.column.wipExceeded'
+          | transloco: { count: totalCount() ?? cards().length, limit: column().wipLimit }
+      }}
     </p>
   }
 
@@ -57,16 +62,16 @@
       </li>
     } @empty {
       <li class="column__empty">
-        {{ dragDisabled() ? 'Nenhum cartão corresponde ao filtro' : 'Arraste um cartão para cá' }}
+        {{ (dragDisabled() ? 'boards.column.emptyFilter' : 'boards.column.emptyDrop') | transloco }}
       </li>
     }
   </ul>
 
   <footer class="column__footer">
     <app-inline-add-form
-      triggerLabel="Adicionar cartão"
-      [inputLabel]="'Título do novo cartão em ' + column().title"
-      placeholder="O que precisa ser feito?"
+      [triggerLabel]="'boards.column.addCard' | transloco"
+      [inputLabel]="'boards.column.newCardLabel' | transloco: { column: column().title }"
+      [placeholder]="'boards.column.newCardPlaceholder' | transloco"
       (submitted)="addCard.emit({ column: column(), title: $event })"
     />
   </footer>
@@ -81,7 +86,7 @@
       (cdkMenuItemTriggered)="editColumn.emit(column())"
     >
       <app-icon name="edit" [size]="16" />
-      Renomear e limite WIP
+      {{ 'boards.column.edit' | transloco }}
     </button>
     @if (canMoveLeft()) {
       <button
@@ -91,7 +96,7 @@
         (cdkMenuItemTriggered)="moveColumn.emit(-1)"
       >
         <app-icon name="arrow-left" [size]="16" />
-        Mover para a esquerda
+        {{ 'boards.column.moveLeft' | transloco }}
       </button>
     }
     @if (canMoveRight()) {
@@ -102,7 +107,7 @@
         (cdkMenuItemTriggered)="moveColumn.emit(1)"
       >
         <app-icon class="flip" name="arrow-left" [size]="16" />
-        Mover para a direita
+        {{ 'boards.column.moveRight' | transloco }}
       </button>
     }
     <button
@@ -112,7 +117,7 @@
       (cdkMenuItemTriggered)="deleteColumn.emit(column())"
     >
       <app-icon name="trash" [size]="16" />
-      Excluir coluna
+      {{ 'boards.column.delete' | transloco }}
     </button>
   </div>
 </ng-template>

@@ -1,6 +1,3 @@
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { LOCALE_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { provideI18nTesting } from '../../../../../testing/i18n-testing';
@@ -11,12 +8,10 @@ describe('CardItemComponent', () => {
   let fixture: ComponentFixture<CardItemComponent>;
   let element: HTMLElement;
 
-  beforeAll(() => registerLocaleData(localePt));
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CardItemComponent],
-      providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }, provideI18nTesting()],
+      providers: [provideI18nTesting()],
     });
     fixture = TestBed.createComponent(CardItemComponent);
     element = fixture.nativeElement as HTMLElement;
@@ -44,7 +39,7 @@ describe('CardItemComponent', () => {
 
     const badge = element.querySelector('.badge');
     expect(badge?.classList).toContain('badge--danger');
-    expect(badge?.textContent).toContain('10 ago.');
+    expect(badge?.textContent).toContain('10 de ago.');
     expect(badge?.textContent).toContain('Atrasado');
   });
 

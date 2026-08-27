@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 
 import { Credentials, LoginResponse, User } from '../core/auth/auth.model';
 import { isJwtExpired } from '../core/auth/jwt';
+import { detectLanguage, readSavedLanguage } from '../core/i18n/language';
 import { createFakeJwt, nameFromEmail } from './fake-jwt';
 import { mockApiSettings } from './mock-api.settings';
 import { KanbanDb, createSeedDb } from './seed-data';
@@ -45,7 +46,7 @@ export class InMemoryDataService implements InMemoryDbService {
         mockApiSettings.clearDb();
       }
     }
-    return createSeedDb();
+    return createSeedDb(detectLanguage(readSavedLanguage(), navigator.languages ?? []));
   }
 
   /** Clients send their own UUIDs (needed for optimistic creates); this is only a fallback. */

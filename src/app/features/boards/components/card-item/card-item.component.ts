@@ -1,22 +1,16 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { DateFormatOptions, TranslocoDatePipe } from '@jsverse/transloco-locale';
 
 import { AvatarComponent } from '../../../../shared/ui/avatar/avatar.component';
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
-import { dueStatus, toIsoDate } from '../../../../shared/utils/dates';
+import { dueStatus, fromIsoDate, toIsoDate } from '../../../../shared/utils/dates';
 import { Card, LABELS_BY_ID } from '../../models/card.model';
 import { checklistProgress } from '../../data-access/utils/checklist-progress';
 
-const DUE_LABELS = {
-  overdue: 'Atrasado',
-  today: 'Vence hoje',
-  soon: 'Vence em breve',
-  later: 'Prazo',
-} as const;
-
 @Component({
   selector: 'app-card-item',
-  imports: [DatePipe, IconComponent, AvatarComponent],
+  imports: [TranslocoPipe, TranslocoDatePipe, IconComponent, AvatarComponent],
   templateUrl: './card-item.component.html',
   styleUrl: './card-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,8 +24,10 @@ export class CardItemComponent {
   protected readonly labels = computed(() => this.card().labels.map((id) => LABELS_BY_ID[id]));
   protected readonly progress = computed(() => checklistProgress(this.card().checklist));
   protected readonly dueStatus = computed(() => dueStatus(this.card().dueDate, this.today()));
-  protected readonly dueLabel = computed(() => {
-    const status = this.dueStatus();
-    return status ? DUE_LABELS[status] : '';
+  protected readonly dueLabelKey = computed(() => `boards.card.due.${this.dueStatus() ?? 'later'}`);
+  protected readonly dueDate = computed(() => {
+    const dueDate = this.card().dueDate;
+    return dueDate ? fromIsoDate(dueDate) : null;
   });
+  protected readonly dueFormat: DateFormatOptions = { day: 'numeric', month: 'short' };
 }

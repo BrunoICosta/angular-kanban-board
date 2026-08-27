@@ -7,6 +7,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { InlineAddFormComponent } from '../../../../shared/ui/inline-add-form/inline-add-form.component';
@@ -37,6 +38,7 @@ export const CARD_LIST_ID_PREFIX = 'card-list-';
     CdkMenuTrigger,
     CdkMenu,
     CdkMenuItem,
+    TranslocoPipe,
   ],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.scss',

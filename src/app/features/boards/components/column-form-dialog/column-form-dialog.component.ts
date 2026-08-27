@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
 import { Column } from '../../models/column.model';
@@ -20,18 +21,27 @@ export const MAX_WIP_LIMIT = 99;
 
 @Component({
   selector: 'app-column-form-dialog',
-  imports: [ReactiveFormsModule, IconComponent],
+  imports: [ReactiveFormsModule, IconComponent, TranslocoPipe],
   template: `
     <form class="dialog dialog--sm" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <header class="dialog__header">
-        <h2 class="dialog__title" id="column-form-title">Editar coluna</h2>
-        <button type="button" class="icon-btn" aria-label="Fechar" (click)="ref.close()">
+        <h2 class="dialog__title" id="column-form-title">
+          {{ 'boards.columnForm.title' | transloco }}
+        </h2>
+        <button
+          type="button"
+          class="icon-btn"
+          [attr.aria-label]="'common.close' | transloco"
+          (click)="ref.close()"
+        >
           <app-icon name="x" />
         </button>
       </header>
 
       <div class="field">
-        <label class="field__label" for="column-title">Nome</label>
+        <label class="field__label" for="column-title">{{
+          'boards.columnForm.name' | transloco
+        }}</label>
         <input
           id="column-title"
           class="input"
@@ -41,12 +51,16 @@ export const MAX_WIP_LIMIT = 99;
           aria-describedby="column-title-error"
         />
         @if (form.controls.title.touched && form.controls.title.invalid) {
-          <span id="column-title-error" class="field__error">Dê um nome à coluna.</span>
+          <span id="column-title-error" class="field__error">{{
+            'boards.columnForm.nameRequired' | transloco
+          }}</span>
         }
       </div>
 
       <div class="field">
-        <label class="field__label" for="column-wip">Limite de WIP</label>
+        <label class="field__label" for="column-wip">{{
+          'boards.columnForm.wip' | transloco
+        }}</label>
         <input
           id="column-wip"
           class="input"
@@ -55,21 +69,25 @@ export const MAX_WIP_LIMIT = 99;
           min="1"
           [attr.max]="maxWip"
           formControlName="wipLimit"
-          placeholder="Sem limite"
+          [placeholder]="'boards.columnForm.wipPlaceholder' | transloco"
           aria-describedby="column-wip-hint"
           [attr.aria-invalid]="form.controls.wipLimit.invalid"
         />
         <span id="column-wip-hint" class="field__hint">
-          Quantidade máxima de cartões em andamento nesta coluna. Deixe vazio para não limitar.
+          {{ 'boards.columnForm.wipHint' | transloco }}
         </span>
         @if (form.controls.wipLimit.invalid) {
-          <span class="field__error">Use um número inteiro entre 1 e {{ maxWip }}.</span>
+          <span class="field__error">
+            {{ 'boards.columnForm.wipInvalid' | transloco: { max: maxWip } }}
+          </span>
         }
       </div>
 
       <footer class="dialog__footer">
-        <button type="button" class="btn btn--ghost" (click)="ref.close()">Cancelar</button>
-        <button type="submit" class="btn btn--primary">Salvar</button>
+        <button type="button" class="btn btn--ghost" (click)="ref.close()">
+          {{ 'common.cancel' | transloco }}
+        </button>
+        <button type="submit" class="btn btn--primary">{{ 'common.save' | transloco }}</button>
       </footer>
     </form>
   `,

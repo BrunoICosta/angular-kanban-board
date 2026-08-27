@@ -1,19 +1,19 @@
 export type LabelId = 'feature' | 'bug' | 'urgent' | 'design' | 'backend' | 'frontend' | 'docs';
 
+/** Display names live in the i18n files (`boards.labels.<id>`). */
 export interface Label {
   id: LabelId;
-  name: string;
   color: string;
 }
 
 export const LABELS: readonly Label[] = [
-  { id: 'feature', name: 'Feature', color: '#8b6dff' },
-  { id: 'bug', name: 'Bug', color: '#ff5c7a' },
-  { id: 'urgent', name: 'Urgente', color: '#f5a524' },
-  { id: 'design', name: 'Design', color: '#e05cff' },
-  { id: 'backend', name: 'Backend', color: '#3ba5ff' },
-  { id: 'frontend', name: 'Frontend', color: '#2fc98a' },
-  { id: 'docs', name: 'Docs', color: '#94a0b8' },
+  { id: 'feature', color: '#8b6dff' },
+  { id: 'bug', color: '#ff5c7a' },
+  { id: 'urgent', color: '#f5a524' },
+  { id: 'design', color: '#e05cff' },
+  { id: 'backend', color: '#3ba5ff' },
+  { id: 'frontend', color: '#2fc98a' },
+  { id: 'docs', color: '#94a0b8' },
 ];
 
 export const LABELS_BY_ID: Readonly<Record<LabelId, Label>> = Object.fromEntries(

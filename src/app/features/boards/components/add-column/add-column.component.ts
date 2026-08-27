@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InlineAddFormComponent } from '../../../../shared/ui/inline-add-form/inline-add-form.component';
 
@@ -7,12 +8,12 @@ export const COLUMN_TITLE_MAX_LENGTH = 40;
 /** Last "column" of the board, used to append new columns. */
 @Component({
   selector: 'app-add-column',
-  imports: [InlineAddFormComponent],
+  imports: [InlineAddFormComponent, TranslocoPipe],
   template: `
     <app-inline-add-form
-      triggerLabel="Adicionar coluna"
-      inputLabel="Nome da nova coluna"
-      placeholder="Nome da coluna"
+      [triggerLabel]="'boards.column.addColumn' | transloco"
+      [inputLabel]="'boards.column.newColumnLabel' | transloco"
+      [placeholder]="'boards.column.newColumnPlaceholder' | transloco"
       [maxLength]="maxLength"
       (submitted)="add.emit($event)"
     />

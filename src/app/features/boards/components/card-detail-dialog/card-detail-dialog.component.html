@@ -1,7 +1,7 @@
 <form class="dialog dialog--lg detail" [formGroup]="form" (ngSubmit)="save()" novalidate>
   <header class="dialog__header">
     <div class="detail__heading">
-      <label class="sr-only" for="card-title">Título do cartão</label>
+      <label class="sr-only" for="card-title">{{ 'boards.detail.titleLabel' | transloco }}</label>
       <textarea
         id="card-title"
         class="detail__title"
@@ -10,15 +10,25 @@
         [attr.maxlength]="titleMax"
         [attr.aria-invalid]="form.controls.title.invalid && form.controls.title.touched"
       ></textarea>
-      <span id="card-dialog-title" class="sr-only">Detalhes do cartão {{ data.card.title }}</span>
+      <span id="card-dialog-title" class="sr-only">
+        {{ 'boards.detail.dialogTitle' | transloco: { title: data.card.title } }}
+      </span>
       @if (form.controls.title.touched && form.controls.title.invalid) {
-        <span class="field__error">O cartão precisa de um título.</span>
+        <span class="field__error">{{ 'boards.detail.titleRequired' | transloco }}</span>
       }
       <span class="detail__created">
-        Criado em {{ data.card.createdAt | date: "d 'de' MMMM 'de' y" }}
+        {{
+          'boards.detail.createdAt'
+            | transloco: { date: data.card.createdAt | translocoDate: { dateStyle: 'long' } }
+        }}
       </span>
     </div>
-    <button type="button" class="icon-btn" aria-label="Fechar" (click)="ref.close()">
+    <button
+      type="button"
+      class="icon-btn"
+      [attr.aria-label]="'common.close' | transloco"
+      (click)="ref.close()"
+    >
       <app-icon name="x" />
     </button>
   </header>
@@ -26,13 +36,15 @@
   <div class="detail__layout">
     <div class="detail__main">
       <div class="field">
-        <label class="field__label" for="card-description">Descrição</label>
+        <label class="field__label" for="card-description">{{
+          'boards.detail.description' | transloco
+        }}</label>
         <textarea
           id="card-description"
           class="input"
           rows="5"
           formControlName="description"
-          placeholder="Adicione mais detalhes, links ou critérios de aceite…"
+          [placeholder]="'boards.detail.descriptionPlaceholder' | transloco"
           [attr.maxlength]="descriptionMax"
         ></textarea>
       </div>
@@ -42,7 +54,9 @@
 
     <aside class="detail__side">
       <div class="field">
-        <label class="field__label" for="card-column">Coluna</label>
+        <label class="field__label" for="card-column">{{
+          'boards.detail.column' | transloco
+        }}</label>
         <select id="card-column" class="input" formControlName="columnId">
           @for (column of data.columns; track column.id) {
             <option [value]="column.id">{{ column.title }}</option>
@@ -51,14 +65,16 @@
       </div>
 
       <div class="field">
-        <label class="field__label" for="card-assignee">Responsável</label>
+        <label class="field__label" for="card-assignee">{{
+          'boards.detail.assignee' | transloco
+        }}</label>
         <div class="assignee">
           <app-avatar [name]="assignee() || null" [size]="32" />
           <input
             id="card-assignee"
             class="input"
             formControlName="assignee"
-            placeholder="Nome da pessoa"
+            [placeholder]="'boards.detail.assigneePlaceholder' | transloco"
             maxlength="60"
             autocomplete="off"
           />
@@ -66,12 +82,12 @@
       </div>
 
       <div class="field">
-        <label class="field__label" for="card-due">Prazo</label>
+        <label class="field__label" for="card-due">{{ 'boards.detail.dueDate' | transloco }}</label>
         <input id="card-due" class="input" type="date" formControlName="dueDate" />
       </div>
 
       <fieldset class="labels">
-        <legend class="field__label">Etiquetas</legend>
+        <legend class="field__label">{{ 'boards.detail.labels' | transloco }}</legend>
         <div class="labels__list">
           @for (label of allLabels; track label.id) {
             <button
@@ -82,7 +98,7 @@
               [attr.aria-pressed]="selectedLabels().includes(label.id)"
               (click)="toggleLabel(label.id)"
             >
-              {{ label.name }}
+              {{ 'boards.labels.' + label.id | transloco }}
             </button>
           }
         </div>
@@ -93,9 +109,11 @@
   <footer class="dialog__footer detail__footer">
     <button type="button" class="btn btn--danger detail__delete" (click)="remove()">
       <app-icon name="trash" [size]="16" />
-      Excluir cartão
+      {{ 'boards.detail.delete' | transloco }}
     </button>
-    <button type="button" class="btn btn--ghost" (click)="ref.close()">Cancelar</button>
-    <button type="submit" class="btn btn--primary">Salvar</button>
+    <button type="button" class="btn btn--ghost" (click)="ref.close()">
+      {{ 'common.cancel' | transloco }}
+    </button>
+    <button type="submit" class="btn btn--primary">{{ 'common.save' | transloco }}</button>
   </footer>
 </form>

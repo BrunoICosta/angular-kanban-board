@@ -1,8 +1,9 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDatePipe } from '@jsverse/transloco-locale';
 
 import { AvatarComponent } from '../../../../shared/ui/avatar/avatar.component';
 import { IconComponent } from '../../../../shared/ui/icon/icon.component';
@@ -24,7 +25,8 @@ export const CARD_DESCRIPTION_MAX_LENGTH = 2000;
   selector: 'app-card-detail-dialog',
   imports: [
     ReactiveFormsModule,
-    DatePipe,
+    TranslocoPipe,
+    TranslocoDatePipe,
     IconComponent,
     AvatarComponent,
     ChecklistEditorComponent,

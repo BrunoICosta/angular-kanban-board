@@ -25,3 +25,12 @@ export function dueStatus(dueDate: string | null, today: string): DueStatus | nu
   }
   return dueDate <= addDays(today, 2) ? 'soon' : 'later';
 }
+
+/**
+ * `yyyy-MM-dd` -> local midnight. `new Date('2026-08-10')` would be UTC midnight, which shows
+ * as the previous day in negative UTC offsets such as Brazil's.
+ */
+export function fromIsoDate(isoDate: string): Date {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}

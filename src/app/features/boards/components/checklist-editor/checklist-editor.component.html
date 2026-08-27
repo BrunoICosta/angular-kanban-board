@@ -1,6 +1,6 @@
 <section class="checklist" aria-labelledby="checklist-title">
   <header class="checklist__header">
-    <h3 id="checklist-title" class="field__label">Checklist</h3>
+    <h3 id="checklist-title" class="field__label">{{ 'boards.checklist.title' | transloco }}</h3>
     @if (progress().total) {
       <span class="checklist__count">{{ progress().done }}/{{ progress().total }}</span>
     }
@@ -10,7 +10,7 @@
     <div
       class="progress"
       role="progressbar"
-      aria-label="Progresso da checklist"
+      [attr.aria-label]="'boards.checklist.progress' | transloco"
       [attr.aria-valuenow]="progress().percent"
       aria-valuemin="0"
       aria-valuemax="100"
@@ -18,7 +18,7 @@
     >
       <span class="progress__bar" [style.width.%]="progress().percent"></span>
     </div>
-    <span class="checklist__percent">{{ progress().percent }}% concluído</span>
+    <span class="checklist__percent">{{ 'boards.checklist.percent' | transloco: progress() }}</span>
   }
 
   <ul class="checklist__items">
@@ -31,7 +31,7 @@
         <button
           type="button"
           class="icon-btn icon-btn--sm item__remove"
-          [attr.aria-label]="'Remover item ' + item.text"
+          [attr.aria-label]="'boards.checklist.remove' | transloco: { text: item.text }"
           (click)="remove(item.id)"
         >
           <app-icon name="x" [size]="14" />
@@ -42,19 +42,19 @@
 
   <!-- Not a <form>: this editor lives inside the card dialog form (forms cannot be nested). -->
   <div class="checklist__add">
-    <label class="sr-only" for="checklist-new">Novo item da checklist</label>
+    <label class="sr-only" for="checklist-new">{{ 'boards.checklist.newItem' | transloco }}</label>
     <input
       id="checklist-new"
       class="input"
       [formControl]="text"
       (keydown.enter)="$event.preventDefault(); add()"
-      placeholder="Adicionar item…"
+      [placeholder]="'boards.checklist.placeholder' | transloco"
       autocomplete="off"
       [attr.maxlength]="maxLength"
     />
     <button type="button" class="btn btn--sm" [disabled]="!text.value.trim()" (click)="add()">
       <app-icon name="plus" [size]="14" />
-      Adicionar
+      {{ 'common.add' | transloco }}
     </button>
   </div>
 </section>

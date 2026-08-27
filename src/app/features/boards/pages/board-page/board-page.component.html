@@ -1,18 +1,18 @@
 <div class="board" [style.--board-color]="boardColor()">
   <header class="board__header">
-    <a class="icon-btn" routerLink="/boards" aria-label="Voltar para meus quadros">
+    <a class="icon-btn" routerLink="/boards" [attr.aria-label]="'boards.board.back' | transloco">
       <app-icon name="arrow-left" />
     </a>
     <span class="board__dot" aria-hidden="true"></span>
-    <h1 class="board__title">{{ board()?.title ?? 'Carregando…' }}</h1>
+    <h1 class="board__title">{{ board()?.title ?? ('common.loading' | transloco) }}</h1>
     @if (status() === 'loaded') {
       <span class="save-status" [class.save-status--saving]="isSaving()" aria-live="polite">
         @if (isSaving()) {
           <span class="spinner" aria-hidden="true"></span>
-          Salvando…
+          {{ 'boards.board.saving' | transloco }}
         } @else {
           <app-icon name="check" [size]="14" />
-          Salvo
+          {{ 'boards.board.saved' | transloco }}
         }
       </span>
     }
@@ -35,24 +35,26 @@
       <app-empty-state
         icon="alert"
         tone="danger"
-        heading="Não foi possível abrir o quadro"
+        [heading]="'boards.board.errorTitle' | transloco"
         [description]="error() ?? 'errors.generic' | transloco"
       >
-        <a class="btn btn--ghost" routerLink="/boards">Voltar aos quadros</a>
+        <a class="btn btn--ghost" routerLink="/boards">{{
+          'boards.board.backToBoards' | transloco
+        }}</a>
         <button type="button" class="btn btn--primary" (click)="reload()">
           <app-icon name="refresh" [size]="16" />
-          Tentar novamente
+          {{ 'common.retry' | transloco }}
         </button>
       </app-empty-state>
     }
     @case ('loaded') {
       @if (columns().length === 0) {
         <app-empty-state
-          heading="Este quadro ainda não tem colunas"
-          description="Crie colunas para representar as etapas do seu fluxo de trabalho."
+          [heading]="'boards.board.noColumnsTitle' | transloco"
+          [description]="'boards.board.noColumnsText' | transloco"
         >
           <button type="button" class="btn btn--primary" (click)="addDefaultColumns()">
-            Usar colunas padrão
+            {{ 'boards.board.useDefaultColumns' | transloco }}
           </button>
         </app-empty-state>
       }
@@ -91,7 +93,11 @@
       </div>
     }
     @default {
-      <div class="board__columns" aria-busy="true" aria-label="Carregando colunas">
+      <div
+        class="board__columns"
+        aria-busy="true"
+        [attr.aria-label]="'boards.board.loadingColumns' | transloco"
+      >
         @for (cards of skeletonColumns; track $index) {
           <div class="skeleton-column">
             <span class="skeleton skeleton--title"></span>
