@@ -1,9 +1,11 @@
 # Fluxo — Quadro Kanban com Angular 20 + NgRx
 
+**Português** · [English](README.en.md)
+
 Quadro Kanban completo feito com **Angular 20 (standalone)**, **NgRx** (Store, Effects, Entity,
 Router Store e DevTools) e **Angular CDK Drag and Drop**. Tem login simulado com JWT, quadros com
 colunas e cartões que podem ser arrastados, **atualização otimista com rollback** quando o servidor
-falha, detalhes do cartão com checklist, filtros, limite de WIP por coluna e tema escuro. O backend
+falha, detalhes do cartão com checklist, filtros, limite de WIP por coluna, tema escuro e interface em **português e inglês**. O backend
 é uma API REST falsa (`angular-in-memory-web-api`) acessada via `HttpClient`, então o projeto roda
 inteiro no GitHub Pages e pode trocar para uma API real sem mexer nos componentes.
 
@@ -36,6 +38,8 @@ demonstração").
 - **Modo demonstração**: no menu do usuário dá para **simular falhas do servidor** (todas as
   escritas retornam 503, ótimo para ver o rollback) e restaurar os dados de exemplo. Indicador
   "Salvando… / Salvo" no topo do quadro.
+- **Português e inglês**: seletor de idioma no cabeçalho (e na tela de login), idioma inicial
+  detectado pelo navegador e salvo no `localStorage`; datas formatadas conforme o idioma.
 - **Responsivo e acessível**: colunas com rolagem horizontal e snap no celular, arraste com toque
   (pressionar e segurar), skip link, foco visível, labels/ARIA, `aria-live` para notificações,
   `prefers-reduced-motion`. Tema escuro por padrão e tema claro opcional (persistido).
@@ -46,11 +50,12 @@ demonstração").
 | --- | --- |
 | Framework | Angular 20.3 (standalone, signals, control flow, `input()/output()/model()`) — CLI 20.3.32 |
 | Estado | NgRx 20.1 — Store, Effects, Entity, Router Store, Store DevTools |
+| i18n | Transloco 8.4 (escopos lazy por feature) + transloco-locale (Intl) |
 | UI | Angular CDK 20.2 — Drag and Drop, Dialog, Menu, Overlay; SCSS com design tokens |
 | Backend falso | angular-in-memory-web-api 0.20 (atrás do `HttpClient`) |
 | Linguagem | TypeScript 5.9 (strict) + RxJS 7.8 |
 | Qualidade | ESLint 9 + angular-eslint 20.7 (regras de acessibilidade), Prettier 3 |
-| Testes | Karma 6 + Jasmine 5 (ChromeHeadless) — 81 testes |
+| Testes | Karma 6 + Jasmine 5 (ChromeHeadless) — 95 testes |
 | CI/CD | GitHub Actions (lint, testes, build) + deploy no GitHub Pages |
 
 ## Arquitetura e decisões
@@ -65,14 +70,15 @@ demonstração").
 
   | Chunk lazy | Tamanho (raw) |
   | --- | --- |
-  | `login-page-component` | ~9 kB |
+  | `login-page-component` | ~10 kB |
   | `shell-component` | ~9 kB |
   | `boards-routes` (state + effects + API da feature) | ~6 kB |
-  | `boards-list-page-component` | ~13 kB |
-  | `board-page-component` (inclui CDK Drag and Drop) | ~95 kB |
-  | `card-detail-dialog-component` | ~13 kB |
+  | `boards-list-page-component` | ~14 kB |
+  | `board-page-component` (inclui CDK Drag and Drop) | ~98 kB |
+  | `card-detail-dialog-component` | ~14 kB |
 
-  Bundle inicial: ~395 kB raw / ~116 kB transferidos.
+  Bundle inicial: ~416 kB raw / ~122 kB transferidos. As traduções também são lazy: cada feature
+  carrega o seu JSON só quando a rota abre.
 - **NgRx por feature**: o estado de quadros, colunas, cartões e UI do quadro é registrado com
   `provideState`/`provideEffects` nos `providers` da rota `boards`, então só é carregado junto com
   o chunk. Só o slice `auth` e o `router` são globais.
@@ -94,6 +100,39 @@ demonstração").
   remover `provideMockApi()` e ajustar o token `API_BASE_URL`.
 - **Componentes OnPush + signals**: `selectSignal` nos componentes, `input()/output()/model()`,
   `computed()`, formulários reativos tipados e nada de `CommonModule`.
+
+## Internacionalização
+
+A interface está em **português (pt-BR, padrão)** e **inglês (en)**, com
+[Transloco](https://jsverse.gitbook.io/transloco):
+
+- **Arquivos**: textos globais (cabeçalho, erros, botões comuns, títulos das rotas) ficam em
+  `public/i18n/<idioma>.json`; cada feature tem o seu **escopo lazy** em
+  `public/i18n/auth/<idioma>.json` e `public/i18n/boards/<idioma>.json`, registrado com
+  `provideTranslocoScope('auth' | 'boards')` nos `providers` da rota. O JSON da feature só é
+  baixado quando o chunk dela carrega.
+- **Carregamento**: `TranslocoHttpLoader` busca os arquivos via `HttpClient` com caminho relativo
+  (funciona com o `base href` do GitHub Pages). O backend falso deixa passar tudo que não começa
+  com `api/`.
+- **Idioma inicial**: escolha salva (`localStorage`, chave `kanban.lang`) > idioma do navegador
+  (`pt*` → pt-BR, qualquer outro → en) > pt-BR. O `LanguageService` aplica o idioma, atualiza
+  `<html lang>` e persiste a troca; o seletor no cabeçalho é um `<select>` nativo com label.
+- **Formatação**: datas usam `translocoDate` (`@jsverse/transloco-locale`, baseado em `Intl`),
+  com pt-BR → `pt-BR` e en → `en-US`.
+- **Títulos**: o `title` das rotas é uma chave (`titles.boards`); um `TitleStrategy` próprio traduz
+  e atualiza o `document.title` quando o idioma muda.
+- **Erros no store**: os effects guardam **chaves** (`errors.unavailable`), não textos — a mensagem
+  é traduzida na hora de exibir, então acompanha a troca de idioma.
+- **Dados de exemplo**: o quadro de demonstração é criado no idioma ativo no primeiro acesso (ou
+  ao restaurar os dados). Depois disso é conteúdo do usuário e não é traduzido.
+- **Testes**: `provideI18nTesting(lang)` carrega os JSON reais de forma síncrona; há testes do
+  seletor, da detecção/persistência, de um componente renderizado nos dois idiomas e um teste que
+  garante que pt-BR e en têm exatamente as mesmas chaves.
+
+**Para adicionar um idioma** (ex.: espanhol): crie `public/i18n/es.json`,
+`public/i18n/auth/es.json` e `public/i18n/boards/es.json` com as mesmas chaves, inclua `'es'` em
+`SUPPORTED_LANGS` e em `LANG_TO_LOCALE` (`core/i18n/language.ts`), ajuste a regra de detecção
+se quiser e adicione o nome em `language.names` nos arquivos globais.
 
 ## Como rodar
 
@@ -125,6 +164,7 @@ src/app/
 │   ├── api/            # API_BASE_URL, tradução de erros HTTP
 │   ├── auth/           # guard, interceptor, JWT, sessão, store (actions/reducer/effects)
 │   ├── demo/           # configurações do modo demonstração
+│   ├── i18n/           # Transloco: loader, idiomas, seletor, TitleStrategy traduzido
 │   ├── layout/         # shell autenticado + header
 │   ├── notifications/  # serviço de toasts + container
 │   ├── store/          # tipo do estado raiz
@@ -146,6 +186,8 @@ src/app/
     ├── ui/             # ícones, avatar, empty state, confirm dialog, inline form
     └── utils/          # datas, iniciais, ids
 ```
+
+Fora de `src/app`: `public/i18n/` (traduções) e `src/testing/` (`provideI18nTesting()` para os specs).
 
 ## Próximos passos
 
