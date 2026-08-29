@@ -51,11 +51,12 @@ tests) · GitHub Actions + GitHub Pages.
   (`public/i18n/auth/…`, `public/i18n/boards/…`) registered with `provideTranslocoScope` in each
   feature route.
 - Initial language: saved choice (`kanban.lang`) > browser language (`pt*` → pt-BR, otherwise en)
-  > pt-BR. `<html lang>` follows the active language; the header has an accessible language select.
+  > pt-BR. `<html lang>` follows the active language; the header and login screen have an accessible flag switcher (inline SVG flags in a radio group).
 - Dates are formatted with `@jsverse/transloco-locale` (Intl). Route titles are translation keys
   resolved by a custom `TitleStrategy`. The store keeps error **keys**, not text.
 - To add a language: create the three JSON files with the same keys and add it to
-  `SUPPORTED_LANGS`/`LANG_TO_LOCALE` in `core/i18n/language.ts`. A spec checks that every language
+  `SUPPORTED_LANGS`, `LANG_TO_LOCALE`, `LANG_NATIVE_NAMES` and `LANG_FLAGS` in
+  `core/i18n/language.ts` (plus its flag in `shared/ui/flag`). A spec checks that every language
   has exactly the same keys.
 
 ## Running it

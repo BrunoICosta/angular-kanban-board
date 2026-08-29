@@ -8,11 +8,7 @@
     "board": "Board"
   },
   "language": {
-    "label": "Language",
-    "names": {
-      "pt-BR": "Português (Brasil)",
-      "en": "English"
-    }
+    "label": "Language"
   },
   "header": {
     "home": "Fluxo — go to my boards",

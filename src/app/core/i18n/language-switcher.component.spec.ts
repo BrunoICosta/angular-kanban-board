@@ -26,44 +26,61 @@ describe('LanguageSwitcherComponent', () => {
     document.documentElement.lang = 'pt-BR';
   });
 
-  function select(): HTMLSelectElement {
-    const el = element.querySelector('select');
-    if (!el) {
-      throw new Error('select not found');
+  const group = () => element.querySelector('[role="radiogroup"]');
+  /** Finds a radio by its accessible name (aria-label). */
+  function radio(name: string): HTMLButtonElement {
+    const found = [...element.querySelectorAll<HTMLButtonElement>('[role="radio"]')].find(
+      (el) => el.getAttribute('aria-label') === name,
+    );
+    if (!found) {
+      throw new Error(`radio "${name}" not found`);
     }
-    return el;
+    return found;
   }
 
-  it('is labelled and lists both languages', () => {
-    const label = element.querySelector('label');
-    expect(label?.textContent?.trim()).toBe('Idioma');
-    expect(label?.getAttribute('for')).toBe(select().id);
-    expect([...select().options].map((o) => o.textContent?.trim())).toEqual([
-      'Português (Brasil)',
-      'English',
-    ]);
-    expect(element.querySelector('.switcher__code')?.textContent?.trim()).toBe('PT');
+  it('renders a labelled radio group with one flag per language, named in its own language', () => {
+    expect(group()?.getAttribute('aria-label')).toBe('Idioma');
+
+    const portuguese = radio('Português (Brasil)');
+    const english = radio('English');
+    expect(portuguese.getAttribute('lang')).toBe('pt-BR');
+    expect(english.getAttribute('lang')).toBe('en');
+    expect(english.title).toBe('English');
+    expect(english.querySelector('app-flag')?.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('switches the language, persists it and updates <html lang>', () => {
-    select().value = 'en';
-    select().dispatchEvent(new Event('change'));
+  it('marks the active language as checked and keeps only it in the tab order', () => {
+    expect(radio('Português (Brasil)').getAttribute('aria-checked')).toBe('true');
+    expect(radio('Português (Brasil)').tabIndex).toBe(0);
+    expect(radio('English').getAttribute('aria-checked')).toBe('false');
+    expect(radio('English').tabIndex).toBe(-1);
+  });
+
+  it('switches on click, persists the choice and updates <html lang>', () => {
+    radio('English').click();
     fixture.detectChanges();
 
     expect(TestBed.inject(TranslocoService).getActiveLang()).toBe('en');
-    expect(TestBed.inject(LanguageService).lang()).toBe('en');
     expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe('en');
     expect(document.documentElement.lang).toBe('en');
-    expect(element.querySelector('label')?.textContent?.trim()).toBe('Language');
-    expect(element.querySelector('.switcher__code')?.textContent?.trim()).toBe('EN');
+    expect(radio('English').getAttribute('aria-checked')).toBe('true');
+    expect(group()?.getAttribute('aria-label')).toBe('Language');
   });
 
-  it('ignores values that are not supported languages', () => {
-    select().value = 'fr';
-    select().dispatchEvent(new Event('change'));
+  it('moves the selection with the arrow keys', () => {
+    radio('Português (Brasil)').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+    );
+    fixture.detectChanges();
 
+    expect(TestBed.inject(LanguageService).lang()).toBe('en');
+    expect(document.activeElement).toBe(radio('English'));
+
+    radio('English').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+    );
+    fixture.detectChanges();
     expect(TestBed.inject(LanguageService).lang()).toBe('pt-BR');
-    expect(localStorage.getItem(LANG_STORAGE_KEY)).toBeNull();
   });
 });
 

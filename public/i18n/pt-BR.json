@@ -8,11 +8,7 @@
     "board": "Quadro"
   },
   "language": {
-    "label": "Idioma",
-    "names": {
-      "pt-BR": "Português (Brasil)",
-      "en": "English"
-    }
+    "label": "Idioma"
   },
   "header": {
     "home": "Fluxo — ir para meus quadros",

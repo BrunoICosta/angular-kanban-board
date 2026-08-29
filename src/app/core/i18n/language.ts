@@ -1,3 +1,5 @@
+import { FlagCode } from '../../shared/ui/flag/flag.component';
+
 export const SUPPORTED_LANGS = ['pt-BR', 'en'] as const;
 export type AppLang = (typeof SUPPORTED_LANGS)[number];
 
@@ -8,6 +10,17 @@ export const LANG_STORAGE_KEY = 'kanban.lang';
 export const LANG_TO_LOCALE: Readonly<Record<AppLang, string>> = {
   'pt-BR': 'pt-BR',
   en: 'en-US',
+};
+
+/** Each language is named in itself, so people can find theirs whatever the current UI language. */
+export const LANG_NATIVE_NAMES: Readonly<Record<AppLang, string>> = {
+  'pt-BR': 'Português (Brasil)',
+  en: 'English',
+};
+
+export const LANG_FLAGS: Readonly<Record<AppLang, FlagCode>> = {
+  'pt-BR': 'br',
+  en: 'us',
 };
 
 export function isAppLang(value: unknown): value is AppLang {

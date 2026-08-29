@@ -116,7 +116,9 @@ A interface está em **português (pt-BR, padrão)** e **inglês (en)**, com
   com `api/`.
 - **Idioma inicial**: escolha salva (`localStorage`, chave `kanban.lang`) > idioma do navegador
   (`pt*` → pt-BR, qualquer outro → en) > pt-BR. O `LanguageService` aplica o idioma, atualiza
-  `<html lang>` e persiste a troca; o seletor no cabeçalho é um `<select>` nativo com label.
+  `<html lang>` e persiste a troca. O seletor (cabeçalho e login) é um grupo de botões com
+  bandeiras em SVG inline (`role="radiogroup"`, setas do teclado, nome de cada idioma no próprio
+  idioma e `lang` no botão).
 - **Formatação**: datas usam `translocoDate` (`@jsverse/transloco-locale`, baseado em `Intl`),
   com pt-BR → `pt-BR` e en → `en-US`.
 - **Títulos**: o `title` das rotas é uma chave (`titles.boards`); um `TitleStrategy` próprio traduz
@@ -131,8 +133,8 @@ A interface está em **português (pt-BR, padrão)** e **inglês (en)**, com
 
 **Para adicionar um idioma** (ex.: espanhol): crie `public/i18n/es.json`,
 `public/i18n/auth/es.json` e `public/i18n/boards/es.json` com as mesmas chaves, inclua `'es'` em
-`SUPPORTED_LANGS` e em `LANG_TO_LOCALE` (`core/i18n/language.ts`), ajuste a regra de detecção
-se quiser e adicione o nome em `language.names` nos arquivos globais.
+`SUPPORTED_LANGS` e em `LANG_TO_LOCALE` (`core/i18n/language.ts`), adicione o nome nativo e a bandeira em
+`LANG_NATIVE_NAMES`/`LANG_FLAGS` (e o SVG em `shared/ui/flag`) e ajuste a regra de detecção se quiser.
 
 ## Como rodar
 
