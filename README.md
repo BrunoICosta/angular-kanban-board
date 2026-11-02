@@ -7,9 +7,9 @@ Router Store e DevTools) e **Angular CDK Drag and Drop**. Tem login simulado com
 colunas e cartões que podem ser arrastados, **atualização otimista com rollback** quando o servidor
 falha, detalhes do cartão com checklist, filtros, limite de WIP por coluna, tema escuro e interface em **português e inglês**. O backend
 é uma API REST falsa (`angular-in-memory-web-api`) acessada via `HttpClient`, então o projeto roda
-inteiro no GitHub Pages e pode trocar para uma API real sem mexer nos componentes.
+inteiro como site estático e pode trocar para uma API real sem mexer nos componentes.
 
-**Demo:** https://brunoicosta.github.io/angular-kanban-board/
+**Demo:** https://portfolio.brunoisaac.dev/angular-kanban-board/
 (entre com qualquer e-mail e uma senha com 6+ caracteres — ou clique em "Preencher com conta de
 demonstração").
 
@@ -56,7 +56,7 @@ demonstração").
 | Linguagem | TypeScript 5.9 (strict) + RxJS 7.8 |
 | Qualidade | ESLint 9 + angular-eslint 20.7 (regras de acessibilidade), Prettier 3 |
 | Testes | Karma 6 + Jasmine 5 (ChromeHeadless) — 95 testes |
-| CI/CD | GitHub Actions (lint, testes, build) + deploy no GitHub Pages |
+| CI/CD | GitHub Actions (lint, testes, build) + deploy na Cloudflare (Workers static assets) |
 
 ## Arquitetura e decisões
 
@@ -112,7 +112,7 @@ A interface está em **português (pt-BR, padrão)** e **inglês (en)**, com
   `provideTranslocoScope('auth' | 'boards')` nos `providers` da rota. O JSON da feature só é
   baixado quando o chunk dela carrega.
 - **Carregamento**: `TranslocoHttpLoader` busca os arquivos via `HttpClient` com caminho relativo
-  (funciona com o `base href` do GitHub Pages). O backend falso deixa passar tudo que não começa
+  (funciona com o `base href` `/angular-kanban-board/` da demo). O backend falso deixa passar tudo que não começa
   com `api/`.
 - **Idioma inicial**: escolha salva (`localStorage`, chave `kanban.lang`) > idioma do navegador
   (`pt*` → pt-BR, qualquer outro → en) > pt-BR. O `LanguageService` aplica o idioma, atualiza
@@ -151,11 +151,19 @@ npm run test:ci      # testes uma vez em Chrome headless
 npm run lint         # ESLint (TS + templates)
 npm run format:check # Prettier
 npm run build        # build de produção em dist/
-npm run build:pages  # build com base-href do GitHub Pages
+npm run build:cf     # build de produção com base-href /angular-kanban-board/ (dist/angular-kanban-board/browser)
 ```
 
 Dica: instale a extensão Redux DevTools para acompanhar as ações (`Board Page`, `Board API`, …) e
 usar time-travel.
+
+## Deploy
+
+Publicado na Cloudflare (Workers static assets) em
+https://portfolio.brunoisaac.dev/angular-kanban-board/ pelo pipeline do repositório
+[portfolio](https://github.com/BrunoICosta/portfolio), que roda `npm run build:cf` e publica
+`dist/angular-kanban-board/browser`. O fallback de SPA (`/angular-kanban-board/*` →
+`index.html`) é feito por um Worker. Este repositório roda só a CI (lint, testes e build).
 
 ## Estrutura de pastas
 

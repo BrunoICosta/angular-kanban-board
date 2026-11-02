@@ -7,9 +7,9 @@ Router Store, DevTools) and **Angular CDK Drag and Drop**. It has a fake JWT log
 draggable columns and cards, **optimistic updates with rollback** when the server fails, card
 details with a checklist, filters, per-column WIP limits, a dark theme and a UI in **Portuguese and
 English**. The backend is a fake REST API (`angular-in-memory-web-api`) behind `HttpClient`, so the
-whole app runs on GitHub Pages and can switch to a real API without touching the components.
+whole app runs as a static site and can switch to a real API without touching the components.
 
-**Demo:** https://brunoicosta.github.io/angular-kanban-board/ (sign in with any e-mail and a
+**Demo:** https://portfolio.brunoisaac.dev/angular-kanban-board/ (sign in with any e-mail and a
 password with 6+ characters, or click "Fill in a demo account").
 
 ![Fluxo Kanban board, dark theme](docs/screenshot.png)
@@ -33,7 +33,7 @@ password with 6+ characters, or click "Fill in a demo account").
 
 Angular 20.3 · NgRx 20.1 · Angular CDK 20.2 · Transloco 8.4 + transloco-locale · angular-in-memory-web-api
 0.20 · TypeScript 5.9 · RxJS 7.8 · ESLint 9 + angular-eslint 20 · Prettier 3 · Karma + Jasmine (95
-tests) · GitHub Actions + GitHub Pages.
+tests) · GitHub Actions + Cloudflare (Workers static assets).
 
 ## Architecture in short
 
@@ -67,8 +67,16 @@ npm start            # http://localhost:4200
 npm run test:ci      # unit tests in headless Chrome
 npm run lint         # ESLint
 npm run build        # production build
-npm run build:pages  # build with the GitHub Pages base href
+npm run build:cf     # production build with base href /angular-kanban-board/
 ```
+
+## Deploy
+
+Published on Cloudflare (Workers static assets) at
+https://portfolio.brunoisaac.dev/angular-kanban-board/ by the pipeline of the
+[portfolio](https://github.com/BrunoICosta/portfolio) repository, which runs `npm run build:cf` and
+serves `dist/angular-kanban-board/browser`. SPA fallback is handled by a Worker; this repository
+only runs CI (lint, tests and build).
 
 ## Author
 

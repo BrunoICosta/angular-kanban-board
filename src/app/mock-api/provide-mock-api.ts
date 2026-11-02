@@ -11,7 +11,7 @@ export function provideMockApi(): EnvironmentProviders {
   return importProvidersFrom(
     HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
       // Relative URLs such as `api/boards` are resolved by the library against the host root
-      // (it ignores <base href>), so the default rootPath works on GitHub Pages too.
+      // (it ignores <base href>), so the default rootPath also works under a base path.
       apiBase: 'api/',
       // Non-API requests (translation files) go to the real web server.
       passThruUnknownUrl: true,

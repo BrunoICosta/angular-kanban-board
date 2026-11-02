@@ -5,7 +5,7 @@ import { Translation, TranslocoLoader } from '@jsverse/transloco';
 /**
  * Loads `public/i18n/<lang>.json` for global strings and `public/i18n/<scope>/<lang>.json` for
  * the lazy feature scopes (Transloco passes `auth/en`, `boards/pt-BR`, ...). The path is relative
- * so it also works under the GitHub Pages base href.
+ * so it also works when the app is served under a base path (`/angular-kanban-board/`).
  */
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {

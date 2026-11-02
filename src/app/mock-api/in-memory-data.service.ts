@@ -23,7 +23,7 @@ type Row = Record<string, unknown> & { id: string };
 const PASS_THROUGH = '__pass-through__';
 
 /**
- * Fake REST backend used by the demo (GitHub Pages has no server).
+ * Fake REST backend used by the demo (it is deployed as a static site, with no server).
  *
  * Endpoints (all under `api/`):
  * - `POST auth/login`                         -> `{ token, user }`
