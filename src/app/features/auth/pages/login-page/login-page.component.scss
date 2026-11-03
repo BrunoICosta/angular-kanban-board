@@ -30,8 +30,14 @@
   &__panel {
     position: relative;
     display: grid;
-    place-items: center;
-    padding: 4.5rem 1rem 2rem;
+    /* Phones: form near the top (no big empty area above it); centered on larger screens. */
+    place-items: start center;
+    padding: 5.5rem 1rem 2rem;
+
+    @media (min-width: 640px) {
+      place-items: center;
+      padding-top: 4.5rem;
+    }
   }
 
   &__tools {
