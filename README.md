@@ -1,4 +1,4 @@
-# Fluxo — Quadro Kanban com Angular 20 + NgRx
+# Fluxo | Quadro Kanban com Angular 20 + NgRx
 
 **Português** · [English](README.en.md)
 
@@ -10,7 +10,7 @@ falha, detalhes do cartão com checklist, filtros, limite de WIP por coluna, tem
 inteiro como site estático e pode trocar para uma API real sem mexer nos componentes.
 
 **Demo:** https://portfolio.brunoisaac.dev/angular-kanban-board/
-(entre com qualquer e-mail e uma senha com 6+ caracteres — ou clique em "Preencher com conta de
+(entre com qualquer e-mail e uma senha com 6+ caracteres, ou clique em "Preencher com conta de
 demonstração").
 
 ![Quadro Kanban do Fluxo no tema escuro](docs/screenshot.png)
@@ -46,17 +46,17 @@ demonstração").
 
 ## Stack
 
-| Camada | Tecnologia |
-| --- | --- |
-| Framework | Angular 20.3 (standalone, signals, control flow, `input()/output()/model()`) — CLI 20.3.32 |
-| Estado | NgRx 20.1 — Store, Effects, Entity, Router Store, Store DevTools |
-| i18n | Transloco 8.4 (escopos lazy por feature) + transloco-locale (Intl) |
-| UI | Angular CDK 20.2 — Drag and Drop, Dialog, Menu, Overlay; SCSS com design tokens |
-| Backend falso | angular-in-memory-web-api 0.20 (atrás do `HttpClient`) |
-| Linguagem | TypeScript 5.9 (strict) + RxJS 7.8 |
-| Qualidade | ESLint 9 + angular-eslint 20.7 (regras de acessibilidade), Prettier 3 |
-| Testes | Karma 6 + Jasmine 5 (ChromeHeadless) — 95 testes |
-| CI/CD | GitHub Actions (lint, testes, build) + deploy na Cloudflare (Workers static assets) |
+| Camada        | Tecnologia                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| Framework     | Angular 20.3 (standalone, signals, control flow, `input()/output()/model()`), CLI 20.3.32 |
+| Estado        | NgRx 20.1, Store, Effects, Entity, Router Store, Store DevTools                           |
+| i18n          | Transloco 8.4 (escopos lazy por feature) + transloco-locale (Intl)                        |
+| UI            | Angular CDK 20.2, Drag and Drop, Dialog, Menu, Overlay; SCSS com design tokens            |
+| Backend falso | angular-in-memory-web-api 0.20 (atrás do `HttpClient`)                                    |
+| Linguagem     | TypeScript 5.9 (strict) + RxJS 7.8                                                        |
+| Qualidade     | ESLint 9 + angular-eslint 20.7 (regras de acessibilidade), Prettier 3                     |
+| Testes        | Karma 6 + Jasmine 5 (ChromeHeadless), 95 testes                                           |
+| CI/CD         | GitHub Actions (lint, testes, build) + deploy na Cloudflare (Workers static assets)       |
 
 ## Arquitetura e decisões
 
@@ -68,17 +68,18 @@ demonstração").
   autenticado (header, menus, toasts) é lazy, porque a tela de login não precisa dele. O dialog de
   detalhes do cartão é importado dinamicamente na primeira abertura. Chunks gerados pelo build:
 
-  | Chunk lazy | Tamanho (raw) |
-  | --- | --- |
-  | `login-page-component` | ~10 kB |
-  | `shell-component` | ~9 kB |
-  | `boards-routes` (state + effects + API da feature) | ~6 kB |
-  | `boards-list-page-component` | ~14 kB |
-  | `board-page-component` (inclui CDK Drag and Drop) | ~98 kB |
-  | `card-detail-dialog-component` | ~14 kB |
+  | Chunk lazy                                         | Tamanho (raw) |
+  | -------------------------------------------------- | ------------- |
+  | `login-page-component`                             | ~10 kB        |
+  | `shell-component`                                  | ~9 kB         |
+  | `boards-routes` (state + effects + API da feature) | ~6 kB         |
+  | `boards-list-page-component`                       | ~14 kB        |
+  | `board-page-component` (inclui CDK Drag and Drop)  | ~98 kB        |
+  | `card-detail-dialog-component`                     | ~14 kB        |
 
   Bundle inicial: ~416 kB raw / ~122 kB transferidos. As traduções também são lazy: cada feature
   carrega o seu JSON só quando a rota abre.
+
 - **NgRx por feature**: o estado de quadros, colunas, cartões e UI do quadro é registrado com
   `provideState`/`provideEffects` nos `providers` da rota `boards`, então só é carregado junto com
   o chunk. Só o slice `auth` e o `router` são globais.
@@ -123,7 +124,7 @@ A interface está em **português (pt-BR, padrão)** e **inglês (en)**, com
   com pt-BR → `pt-BR` e en → `en-US`.
 - **Títulos**: o `title` das rotas é uma chave (`titles.boards`); um `TitleStrategy` próprio traduz
   e atualiza o `document.title` quando o idioma muda.
-- **Erros no store**: os effects guardam **chaves** (`errors.unavailable`), não textos — a mensagem
+- **Erros no store**: os effects guardam **chaves** (`errors.unavailable`), não textos, a mensagem
   é traduzida na hora de exibir, então acompanha a troca de idioma.
 - **Dados de exemplo**: o quadro de demonstração é criado no idioma ativo no primeiro acesso (ou
   ao restaurar os dados). Depois disso é conteúdo do usuário e não é traduzido.
@@ -209,6 +210,6 @@ Fora de `src/app`: `public/i18n/` (traduções) e `src/testing/` (`provideI18nTe
 
 ## Autor
 
-**Bruno Vinicius Isaac Costa** — https://github.com/BrunoICosta
+**Bruno Vinicius Isaac Costa** · https://github.com/BrunoICosta
 
 Licença [MIT](LICENSE).

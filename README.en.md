@@ -1,4 +1,4 @@
-# Fluxo — Kanban board with Angular 20 + NgRx
+# Fluxo | Kanban board with Angular 20 + NgRx
 
 [Português](README.md) · **English**
 
@@ -80,4 +80,4 @@ only runs CI (lint, tests and build).
 
 ## Author
 
-**Bruno Vinicius Isaac Costa** — https://github.com/BrunoICosta · [MIT license](LICENSE)
+**Bruno Vinicius Isaac Costa** · https://github.com/BrunoICosta · [MIT license](LICENSE)

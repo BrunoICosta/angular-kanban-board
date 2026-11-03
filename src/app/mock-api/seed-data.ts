@@ -286,8 +286,8 @@ export function createSeedDb(lang: AppLang = 'pt-BR'): KanbanDb {
             {
               title: tr('RxJS: operadores de alta ordem', 'RxJS: higher-order operators'),
               description: tr(
-                'switchMap, concatMap, mergeMap e exhaustMap — quando usar cada um.',
-                'switchMap, concatMap, mergeMap and exhaustMap — when to use each.',
+                'switchMap, concatMap, mergeMap e exhaustMap: quando usar cada um.',
+                'switchMap, concatMap, mergeMap and exhaustMap: when to use each.',
               ),
               labels: ['frontend'],
               checklist: [
